@@ -1,0 +1,50 @@
+name:                tpmEmulator
+version:             1.0.0
+synopsis:            Haskell emulation of TPM (Trusted Platform Module) interface
+-- description:
+license:             BSD3
+license-file:        LICENSE
+author:              Adam Petz
+-- Maintainer:
+-- copyright:
+category:            System
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  exposed-modules:     TPM,
+                       TPM.Admin,
+                       TPM.Capability,
+                       TPM.Cipher,
+                       TPM.Const,
+                       TPM.Digest,
+                       TPM.Driver,
+                       TPM.Error,
+                       TPM.Eviction,
+                       TPM.Key,
+                       TPM.Nonce,
+                       TPM.PCR,
+                       TPM.Session,
+                       TPM.SignTest,
+                       TPM.Storage,
+                       TPM.Types,
+                       TPM.Utils,
+                       TPM.Driver.Socket
+  -- other-modules:
+  other-extensions:    TypeSynonymInstances,
+                       FlexibleInstances,
+                       DeriveDataTypeable,
+                       ExistentialQuantification
+  build-depends:       base >=4.7 && <4.8,
+                       binary >=0.7 && <0.8,
+                       bytestring >=0.10 && <0.11,
+                       random >=1.0 && <1.1,
+                       network >=2.4 && <2.5,
+                       HsOpenSSL,
+                       SHA,
+                       RSA,
+                       crypto-api
+
+  -- hs-source-dirs:
+  default-language:    Haskell2010
