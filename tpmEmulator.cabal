@@ -4,8 +4,8 @@ synopsis:            Haskell emulation of TPM (Trusted Platform Module) interfac
 -- description:
 license:             BSD3
 license-file:        LICENSE
-author:              Adam Petz
--- Maintainer:
+author:              Wesley Peck
+Maintainer:          Adam Petz
 -- copyright:
 category:            System
 build-type:          Simple
@@ -43,7 +43,7 @@ library
                        network >=2.4 && <2.5,
                        HsOpenSSL,
                        SHA,
-                       RSA,
+                       RSA >= 2.1.0.1,
                        crypto-api
 
   -- hs-source-dirs:
