@@ -1,4 +1,4 @@
-{- {-# LANGUAGE FlexibleContexts, UndecidableInstances#-} -}
+{-# LANGUAGE FlexibleContexts, UndecidableInstances, RecordWildCards, OverloadedStrings#-}
 
 module TPM.Types where
 import TPM.Utils
@@ -16,6 +16,15 @@ import Control.Monad
 import Control.Exception
 import Prelude hiding (take,length)
 import qualified Prelude as P
+import qualified Data.Text as T
+import qualified Data.Text.Encoding as TE
+import qualified Data.ByteString.Base64 as Base64
+import Data.Aeson (toJSON, parseJSON, ToJSON,FromJSON, object , (.=), (.:) )
+import qualified Data.Aeson as DA (Value(..), encode, decode, eitherDecode)
+import Control.Applicative ( (<$>), (<*>), pure )
+import qualified Data.HashMap.Strict as HM (member, lookup)
+--import Data.Maybe
+import qualified Data.ByteString.Char8 as Char8
 
 -------------------------------------------------------------------------------
 -- Basic data types as defined by section 2.2.1 of the document:
@@ -96,7 +105,7 @@ instance Binary TPM_ASYM_CA_CONTENTS where
     sym <- get
     dig <- get
     return $ TPM_ASYM_CA_CONTENTS sym dig
-    
+
 
 data TPM_IDENTITY_CONTENTS = TPM_IDENTITY_CONTENTS {
   labelPrivCADigest :: TPM_CHOSENID_HASH,
@@ -157,7 +166,7 @@ data TPMDuration = TPMDuration { small :: Integer
 -- TPM startup effects as defined by section 4.6 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-data TPM_STARTUP_EFFECTS = TPM_STARTUP_EFFECTS { 
+data TPM_STARTUP_EFFECTS = TPM_STARTUP_EFFECTS {
       contextInit :: BOOL
     , transInit :: BOOL
     , hashInit :: BOOL
@@ -183,7 +192,7 @@ instance Binary TPM_STARTUP_EFFECTS where
               an' = if ci then setBit (0 :: Word8) 7 else (0 :: Word8)
               di' = if ci then setBit (0 :: Word8) 0 else (0 :: Word8)
     get = do
-        b1 <- (get :: Get Word8) 
+        b1 <- (get :: Get Word8)
         b2 <- (get :: Get Word8)
         b3 <- (get :: Get Word8)
         b4 <- (get :: Get Word8)
@@ -196,7 +205,7 @@ instance Binary TPM_STARTUP_EFFECTS where
 -- TPM version structure as defined by section 5.1 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-data TPM_STRUCT_VER = TPM_STRUCT_VER { 
+data TPM_STRUCT_VER = TPM_STRUCT_VER {
       tpmStructVerMajor :: BYTE
     , tpmStructVerMinor :: BYTE
     , tpmStructVerRevMajor :: BYTE
@@ -241,7 +250,7 @@ instance Binary TPM_VERSION_BYTE where
 -- TPM version bytes as defined by section 5.3 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-data TPM_VERSION = TPM_VERSION { 
+data TPM_VERSION = TPM_VERSION {
       major :: TPM_VERSION_BYTE
     , minor :: TPM_VERSION_BYTE
     , revMajor :: BYTE
@@ -250,7 +259,7 @@ data TPM_VERSION = TPM_VERSION {
 
 instance Show TPM_VERSION where
     show (TPM_VERSION mj mi _ _) = (show mj) ++ "." ++ (show mi)
-    
+
 instance Binary TPM_VERSION where
     put (TPM_VERSION mj mi rmj rmi) = do
         put mj
@@ -298,7 +307,7 @@ newtype TPM_NONCE = TPM_NONCE ByteString deriving (Eq)
 
 instance Show TPM_NONCE where
     show (TPM_NONCE bs) = bshex bs
-    
+
 instance Binary TPM_NONCE where
     put (TPM_NONCE bs) = putLazyByteString bs
     get = getLazyByteString 20 >>= return . TPM_NONCE
@@ -318,7 +327,7 @@ newtype TPM_AUTHDATA = TPM_AUTHDATA ByteString deriving (Eq)
 
 instance Show TPM_AUTHDATA where
     show (TPM_AUTHDATA bs) = bshex bs
-    
+
 instance Binary TPM_AUTHDATA where
     put (TPM_AUTHDATA bs) = putLazyByteString bs
     get = getLazyByteString 20 >>= return . TPM_AUTHDATA
@@ -334,13 +343,13 @@ type TPM_ENCAUTH = TPM_AUTHDATA
 -- TPM key handle lists as defined by section 5.7 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-data TPM_KEY_HANDLE_LIST = TPM_KEY_HANDLE_LIST {    
+data TPM_KEY_HANDLE_LIST = TPM_KEY_HANDLE_LIST {
       tpmKeyHandles :: [TPM_KEY_HANDLE]
     } deriving (Eq)
 
 instance Show TPM_KEY_HANDLE_LIST where
     show (TPM_KEY_HANDLE_LIST handles) = unwords (map showit handles)
-        where showit a = "0x" ++ mkhex a 
+        where showit a = "0x" ++ mkhex a
 
 instance Binary TPM_KEY_HANDLE_LIST where
     put (TPM_KEY_HANDLE_LIST l) = do
@@ -350,7 +359,7 @@ instance Binary TPM_KEY_HANDLE_LIST where
         num <- (get :: Get UINT16)
         lst <- replicateM (fromIntegral num) get
         return $ TPM_KEY_HANDLE_LIST lst
-        
+
 
 -------------------------------------------------------------------------------
 -- TPM change auth structure as defined by section 5.11 of the document:
@@ -375,7 +384,7 @@ data TPM_MIGRATIONKEYAUTH = TPM_MIGRATIONKEYAUTH {
     , tpmMigrationKeyAuthDigest :: TPM_DIGEST
     } deriving (Show,Eq)
 
-instance Binary TPM_MIGRATIONKEYAUTH where 
+instance Binary TPM_MIGRATIONKEYAUTH where
     put (TPM_MIGRATIONKEYAUTH ak as ad) = do
         put ak
         put as
@@ -488,7 +497,7 @@ data TPM_CMK_AUTH = TPM_CMK_AUTH {
 
 instance Binary TPM_CMK_AUTH where
     put (TPM_CMK_AUTH m d s) = do
-        put m 
+        put m
         put d
         put s
     get = do
@@ -652,7 +661,7 @@ data TPM_STCLEAR_DATA = TPM_STCLEAR_DATA {
 -- TPM any internal data as defined by section 7.6 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-data TPM_SESSION_DATA = TPM_SESSION_DATA { 
+data TPM_SESSION_DATA = TPM_SESSION_DATA {
     --  vendor specific
     } deriving (Show,Eq)
 
@@ -814,7 +823,7 @@ data TPM_STORED_DATA = TPM_STORED_DATA {
     } deriving (Eq)
 
 instance Show TPM_STORED_DATA where
-    show (TPM_STORED_DATA inf enc) = 
+    show (TPM_STORED_DATA inf enc) =
         "Stored Info: " ++ (blkwrap hdr 60 $ bshex inf) ++ "\n" ++
         "Stored Data: " ++ (blkwrap hdr 60 $ bshex enc)
         where hdr = "             "
@@ -870,7 +879,7 @@ data TPM_SYMMETRIC_KEY = TPM_SYMMETRIC_KEY {
       tpmSymmetricAlg    :: TPM_ALGORITHM_ID
     , tpmSymmetricScheme :: TPM_ENC_SCHEME
     {-, tpmSymmetricSize   :: UINT16 -}
-    , tpmSymmetricData   :: {-B.-}ByteString  --Made strict here for cooperation with encryption library, but encoded lazy(see binary instance below) for transmission advantages.  
+    , tpmSymmetricData   :: {-B.-}ByteString  --Made strict here for cooperation with encryption library, but encoded lazy(see binary instance below) for transmission advantages.
     } deriving (Show, Eq)
 
 x :: Word32
@@ -887,8 +896,8 @@ instance Binary TPM_SYMMETRIC_KEY where
     enc <- get
     size <- (get :: Get UINT16)
     dat <-  getLazyByteString (fromIntegral size)
-    return $ TPM_SYMMETRIC_KEY alg enc ({-toStrict-} dat) 
-  
+    return $ TPM_SYMMETRIC_KEY alg enc ({-toStrict-} dat)
+
 -------------------------------------------------------------------------------
 -- TPM bound data structure as defined by section 9.5 of the document:
 --  TPM Main: Part 2 - TPM Structures
@@ -928,7 +937,7 @@ instance Show TPM_KEY_PARMS_DATA where
 
 {-
 instance Show TPM_KEY_PARMS where
-    show (TPM_KEY_PARMS alg enc sig dat) = 
+    show (TPM_KEY_PARMS alg enc sig dat) =
         "Algorithm:   " ++ tpm_alg_getname alg ++
         "\nEnc. Scheme: " ++ tpm_es_getname enc ++
         "\nSig. Scheme: " ++ tpm_ss_getname sig ++
@@ -936,7 +945,7 @@ instance Show TPM_KEY_PARMS where
 -}
 
 instance Binary TPM_KEY_PARMS where
-    put(TPM_KEY_PARMS alg enc sig dat) = do 
+    put(TPM_KEY_PARMS alg enc sig dat) = do
         put alg
         put enc
         put sig
@@ -951,12 +960,12 @@ instance Binary TPM_KEY_PARMS where
                 putLazyByteString bs
             NO_DATA -> do
                 put (0 :: UINT32)
-    get = do 
+    get = do
         alg  <- get
         enc  <- get
         sig  <- get
         case lookup alg tbl of
-            Just finish -> do 
+            Just finish -> do
                 size <- (get :: Get UINT32)
                 dat  <- getLazyByteString (fromIntegral size)
                 return $ finish dat alg enc sig
@@ -978,12 +987,12 @@ data TPM_RSA_KEY_PARMS = TPM_RSA_KEY_PARMS {
     } deriving (Show,Eq, Read)
 
 instance Binary TPM_RSA_KEY_PARMS where
-    put (TPM_RSA_KEY_PARMS len prim exp) = do 
+    put (TPM_RSA_KEY_PARMS len prim exp) = do
         put len
         put prim
         put ((fromIntegral $ length exp) :: UINT32)
         putLazyByteString exp
-    get = do 
+    get = do
         len <- get
         prim <- get
         size <- (get :: Get UINT32)
@@ -1012,7 +1021,7 @@ instance Binary TPM_SYMMETRIC_KEY_PARMS where
         size <- (get :: Get UINT32)
         iv <- getLazyByteString (fromIntegral size)
         return $ TPM_SYMMETRIC_KEY_PARMS kl bs iv
-        
+
 
 -------------------------------------------------------------------------------
 -- TPM key structure as defined by section 10.2 of the document:
@@ -1034,10 +1043,10 @@ instance Show TPM_KEY where
         "-----------------------------------------------------------------" ++
         "\nUsage:       " ++ tpm_key_getname use ++
         "\nFlags:       " ++ tpm_kf_getname flg ++
-        "\nAuth:        " ++ tpm_auth_getname auth ++  
+        "\nAuth:        " ++ tpm_auth_getname auth ++
         "\nPCR Info:    " ++ (bshex pcr) ++
         "\nEnc. Data:   " ++ (blkwrap hdr 60 $ bshex enc)  ++
-        "\n" ++ (show prm) ++ 
+        "\n" ++ (show prm) ++
         "\n" ++ (show pub)
         where hdr = "             "
 
@@ -1127,7 +1136,7 @@ instance Show TPM_STORE_PUBKEY where
 -}
 
 instance Binary TPM_STORE_PUBKEY where
-    put (TPM_STORE_PUBKEY dat) = do 
+    put (TPM_STORE_PUBKEY dat) = do
         put ((fromIntegral $ length dat) :: UINT32)
         putLazyByteString dat
     get = do
@@ -1146,16 +1155,16 @@ data TPM_PUBKEY = TPM_PUBKEY {
 
 {-
 instance Show TPM_PUBKEY where
-    show (TPM_PUBKEY prms key) = 
+    show (TPM_PUBKEY prms key) =
         (show prms) ++ "\n" ++
         (show key)
 -}
 
 instance Binary TPM_PUBKEY where
-    put (TPM_PUBKEY parms dat) = do 
+    put (TPM_PUBKEY parms dat) = do
         put parms
         put dat
-    get = do 
+    get = do
         parms <- get
         dat <- get
         return $ TPM_PUBKEY parms dat
@@ -1217,7 +1226,7 @@ data TPM_MIGRATE_ASYMKEY = TPM_MIGRATE_ASYMKEY {
     } deriving (Show,Eq)
 
 instance Binary TPM_MIGRATE_ASYMKEY where
-    put (TPM_MIGRATE_ASYMKEY t u d k) = do 
+    put (TPM_MIGRATE_ASYMKEY t u d k) = do
         put t
         put u
         put d
@@ -1300,7 +1309,7 @@ data TPM_DELEGATE_TABLE_ROW = TPM_DELEGATE_TABLE_ROW {
 -- TPM delegate table structure as defined by section 20.10 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-data TPM_DELEGATE_TABLE = TPM_DELEGATE_TABLE { 
+data TPM_DELEGATE_TABLE = TPM_DELEGATE_TABLE {
       tpmDelegateTable :: [TPM_DELEGATE_TABLE_ROW]
     } deriving (Show,Eq)
 
@@ -1317,3 +1326,142 @@ data TPM_CAP_VERSION_INFO = TPM_CAP_VERSION {
     , tpmCapVersionVSize  :: UINT16
     , tpmCapVersionVSpec  :: ByteString
     } deriving (Show,Eq)
+
+
+----------------------------------------------------------------------
+-- JSON INSTANCES-----------------------------------------------------
+----------------------------------------------------------------------
+
+encodeToText :: B.ByteString -> T.Text
+encodeToText = TE.decodeUtf8 . Base64.encode
+
+decodeFromText :: T.Text -> B.ByteString
+decodeFromText = {-either fail return .-} Base64.decodeLenient . TE.encodeUtf8
+
+decodeFromTextL :: (Monad m) => T.Text -> m ByteString
+decodeFromTextL x = let bs = decodeFromText x in
+		       return (fromStrict bs)
+
+decodeFromTextLStayStrict :: (Monad m) => T.Text -> m B.ByteString
+decodeFromTextLStayStrict x = let bs = decodeFromText x in
+		       return (bs)
+
+
+decodeFromTextL' :: T.Text -> ByteString
+decodeFromTextL' x = let bs = decodeFromText x in
+		       fromStrict bs
+
+-- JSON stuff!
+
+--Request Things first
+   --toJSON
+jsonEncode :: (ToJSON a) => a -> ByteString
+jsonEncode = DA.encode
+
+jsonEitherDecode :: (FromJSON a) => ByteString -> Either String a
+jsonEitherDecode = DA.eitherDecode
+
+jsonDecode :: (FromJSON a) => ByteString -> Maybe a
+jsonDecode= DA.decode
+
+instance ToJSON B.ByteString where
+	toJSON = DA.String . encodeToText
+instance FromJSON B.ByteString where
+	parseJSON (DA.String str) = pure $ decodeFromText str
+
+instance ToJSON TPM_IDENTITY_CONTENTS where
+	toJSON (TPM_IDENTITY_CONTENTS {..}) = object [ "labelPrivCADigest" .= toJSON labelPrivCADigest --this is just TPM_Digest again
+						     , "identityPubKey" .= toJSON identityPubKey   --did this one too.
+						     ]
+instance FromJSON TPM_IDENTITY_CONTENTS where
+	parseJSON (DA.Object o) = TPM_IDENTITY_CONTENTS <$> o .: "labelPrivCADigest"
+							<*> o .: "identityPubKey"
+
+instance ToJSON TPM_PUBKEY where
+	toJSON (TPM_PUBKEY {..}) = object [ "TPM_KEY_PARMS" .= toJSON tpmPubKeyParams
+					  , "TPM_STORE_PUBKEY" .= toJSON tpmPubKeyData
+					  ]
+instance FromJSON TPM_PUBKEY where
+	parseJSON (DA.Object o) = TPM_PUBKEY <$> o .: "TPM_KEY_PARMS"
+					     <*> o .: "TPM_STORE_PUBKEY"
+instance ToJSON TPM_KEY_PARMS where
+	toJSON TPM_KEY_PARMS {..} = object [ "TPM_ALGORITHM_ID" .= toJSON tpmKeyParamAlg --word32
+					   , "TPM_ENC_SCHEME" .= toJSON tpmKeyParamEnc --word16
+					   , "TPM_SIG_SCHEME" .= toJSON tpmKeyParamSig  --word16
+					   , "TPM_KEY_PARMS_DATA" .= toJSON tpmKeyParamData
+					   ]
+instance FromJSON TPM_KEY_PARMS where
+	parseJSON (DA.Object o) = TPM_KEY_PARMS <$> o .: "TPM_ALGORITHM_ID"
+						<*> o .: "TPM_ENC_SCHEME"
+						<*> o .: "TPM_SIG_SCHEME"
+						<*> o .: "TPM_KEY_PARMS_DATA"
+{-
+data TPM_KEY_PARMS_DATA = RSA_DATA TPM_RSA_KEY_PARMS
+                        | AES_DATA TPM_SYMMETRIC_KEY_PARMS
+                        | NO_DATA
+                        deriving (Eq, Read, Show)					    -}
+
+instance ToJSON TPM_KEY_PARMS_DATA where
+	toJSON (RSA_DATA tpm_RSA_KEY_PARMS) = object [ "RSA_DATA" .= toJSON tpm_RSA_KEY_PARMS ]
+	toJSON (AES_DATA tpm_SYMMETRIC_KEY_PARMS) = object [ "AES_DATA" .= toJSON tpm_SYMMETRIC_KEY_PARMS ]
+	toJSON (NO_DATA) = DA.String "NO_DATA"
+instance FromJSON TPM_KEY_PARMS_DATA where
+	parseJSON (DA.Object o)	| HM.member "RSA_DATA" o = RSA_DATA  <$> o .: "RSA_DATA"
+				| HM.member "AES_DATA" o = AES_DATA <$> o .: "AES_DATA"
+				| HM.member "NO_DATA" o = pure NO_DATA
+
+--DA.Object = HaskMap Text Value
+
+
+
+instance ToJSON TPM_RSA_KEY_PARMS where
+	toJSON (TPM_RSA_KEY_PARMS {..}) = object [ "tpmRsaKeyLength" .= toJSON tpmRsaKeyLength
+						 , "tpmRsaKeyPrimes" .= toJSON tpmRsaKeyPrimes
+						 , "tpmRsaKeyExp" .= encodeToText (toStrict tpmRsaKeyExp)
+						 ]
+instance FromJSON TPM_RSA_KEY_PARMS where
+	parseJSON (DA.Object o) = TPM_RSA_KEY_PARMS <$> o .: "tpmRsaKeyLength"
+						    <*> o .: "tpmRsaKeyPrimes"
+						    <*> ((o .: "tpmRsaKeyExp") >>= decodeFromTextL)
+instance ToJSON TPM_SYMMETRIC_KEY_PARMS where
+	toJSON (TPM_SYMMETRIC_KEY_PARMS {..}) = object [ "tpmSymKeyLength" .= toJSON tpmSymKeyLength
+					 	       , "tpmSymKeyBlockSize" .= toJSON tpmSymKeyBlockSize
+					 	       , "tpmSymKeyIV" .= encodeToText (toStrict tpmSymKeyIV)
+					 	       ]
+instance FromJSON TPM_SYMMETRIC_KEY_PARMS where
+	parseJSON (DA.Object o) = TPM_SYMMETRIC_KEY_PARMS <$>  o .: "tpmSymKeyLength"
+							  <*> o .:  "tpmSymKeyBlockSize"
+							  <*> ((o .: "tpmSymKeyIV") >>= decodeFromTextL)
+
+	{-<$> o .: "DesiredEvidence"
+  				 <*> o .: "TPM_PCR_SELECTION"
+  				 <*> o .: "TPM_NONCE" -}
+instance ToJSON TPM_STORE_PUBKEY where
+	toJSON (TPM_STORE_PUBKEY bs) = object [ "TPM_STORE_PUBKEY" .= encodeToText (toStrict bs) ]
+testpubkey = TPM_STORE_PUBKEY $ fromStrict $ Char8.pack "3434"
+instance FromJSON TPM_STORE_PUBKEY where
+	parseJSON (DA.Object o) = TPM_STORE_PUBKEY <$> ((o .: "TPM_STORE_PUBKEY") >>= decodeFromTextL)
+
+instance ToJSON TPM_PCR_COMPOSITE where
+	toJSON (TPM_PCR_COMPOSITE {..}) = object [ "TPM_PCR_SELECTION" .= toJSON tpmPcrCompositeSelection
+						 , "TPM_PCRVALUEs" .= toJSON tpmPcrCompositePcrs
+						 ]
+instance FromJSON TPM_PCR_COMPOSITE where
+	parseJSON (DA.Object o) = TPM_PCR_COMPOSITE <$> o .: "TPM_PCR_SELECTION"
+						    <*> o .: "TPM_PCRVALUEs"
+
+--instance ToJSON TPM_PCRVALUE where TPM_PCRVALUE is a synonym for TPM_DIGEST
+instance ToJSON TPM_DIGEST where
+	toJSON (TPM_DIGEST bs) = object [ "TPM_DIGEST" .= encodeToText (toStrict bs) ]
+instance FromJSON TPM_DIGEST where
+	parseJSON (DA.Object o) = TPM_DIGEST <$> ((o .: "TPM_DIGEST") >>= decodeFromTextL)
+
+instance ToJSON TPM_PCR_SELECTION where
+	toJSON (TPM_PCR_SELECTION bs) = object [ "TPM_PCR_SELECTION" .= encodeToText (toStrict bs) ]
+instance FromJSON TPM_PCR_SELECTION where
+	parseJSON (DA.Object o) = TPM_PCR_SELECTION <$> ((o .: "TPM_PCR_SELECTION") >>= decodeFromTextL)
+
+instance ToJSON TPM_NONCE where
+  toJSON (TPM_NONCE n) = object ["TPM_NONCE" .= encodeToText (toStrict n)]
+instance FromJSON TPM_NONCE where
+	parseJSON (DA.Object o) = TPM_NONCE <$> ((o .: "TPM_NONCE") >>= decodeFromTextL)
