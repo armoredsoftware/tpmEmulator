@@ -36,6 +36,8 @@ library
                        FlexibleInstances,
                        DeriveDataTypeable,
                        ExistentialQuantification
+  -- extra-lib-dirs:      /home/armored/protocolImplementation/protocolImplementation/shared/bytestringJSON/
+  
   build-depends:       base >=4.7 && <4.8,
                        binary >=0.7 && <0.8,
                        bytestring >=0.10 && <0.11,
@@ -49,5 +51,6 @@ library
                        bytestring-json,
                        unordered-containers
 
-  -- hs-source-dirs:
+ -- hs-source-dirs:      /home/armored/protocolImplementation/protocolImplementation/shared/bytestringJSON/
+
   default-language:    Haskell2010
