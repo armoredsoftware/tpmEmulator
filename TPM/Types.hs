@@ -16,9 +16,10 @@ import Control.Monad
 import Control.Exception
 import Prelude hiding (take,length)
 import qualified Prelude as P
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as TE
-import qualified Data.ByteString.Base64 as Base64
+--import qualified Data.Text as T
+--import qualified Data.Text.Encoding as TE
+--import qualified Data.ByteString.Base64 as Base64
+import ByteStringJSON 
 import Data.Aeson (toJSON, parseJSON, ToJSON,FromJSON, object , (.=), (.:) )
 import qualified Data.Aeson as DA (Value(..), encode, decode, eitherDecode)
 import Control.Applicative ( (<$>), (<*>), pure )
@@ -1332,25 +1333,6 @@ data TPM_CAP_VERSION_INFO = TPM_CAP_VERSION {
 -- JSON INSTANCES-----------------------------------------------------
 ----------------------------------------------------------------------
 
-encodeToText :: B.ByteString -> T.Text
-encodeToText = TE.decodeUtf8 . Base64.encode
-
-decodeFromText :: T.Text -> B.ByteString
-decodeFromText = {-either fail return .-} Base64.decodeLenient . TE.encodeUtf8
-
-decodeFromTextL :: (Monad m) => T.Text -> m ByteString
-decodeFromTextL x = let bs = decodeFromText x in
-		       return (fromStrict bs)
-
-decodeFromTextLStayStrict :: (Monad m) => T.Text -> m B.ByteString
-decodeFromTextLStayStrict x = let bs = decodeFromText x in
-		       return (bs)
-
-
-decodeFromTextL' :: T.Text -> ByteString
-decodeFromTextL' x = let bs = decodeFromText x in
-		       fromStrict bs
-
 -- JSON stuff!
 
 --Request Things first
@@ -1363,11 +1345,6 @@ jsonEitherDecode = DA.eitherDecode
 
 jsonDecode :: (FromJSON a) => ByteString -> Maybe a
 jsonDecode= DA.decode
-
-instance ToJSON B.ByteString where
-	toJSON = DA.String . encodeToText
-instance FromJSON B.ByteString where
-	parseJSON (DA.String str) = pure $ decodeFromText str
 
 instance ToJSON TPM_IDENTITY_CONTENTS where
 	toJSON (TPM_IDENTITY_CONTENTS {..}) = object [ "labelPrivCADigest" .= toJSON labelPrivCADigest --this is just TPM_Digest again

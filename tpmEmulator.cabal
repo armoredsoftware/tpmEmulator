@@ -1,5 +1,5 @@
 name:                tpmEmulator
-version:             1.0.0
+version:             1.0.1
 synopsis:            Haskell emulation of TPM (Trusted Platform Module) interface
 -- description:
 license:             BSD3
@@ -39,15 +39,14 @@ library
   build-depends:       base >=4.7 && <4.8,
                        binary >=0.7 && <0.8,
                        bytestring >=0.10 && <0.11,
-                       random >=1.0 && <1.1,
+                       random,
                        network >=2.4 && <2.5,
                        HsOpenSSL,
                        SHA,
                        RSA >= 2.1.0.1,
                        crypto-api,
-                       text,
-                       base64-bytestring,
                        aeson,
+                       bytestring-json,
                        unordered-containers
 
   -- hs-source-dirs:
