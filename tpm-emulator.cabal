@@ -1,4 +1,4 @@
-name:                tpmEmulator
+name:                tpm-emulator
 version:             1.0.1
 synopsis:            Haskell emulation of TPM (Trusted Platform Module) interface
 -- description:
@@ -36,21 +36,21 @@ library
                        FlexibleInstances,
                        DeriveDataTypeable,
                        ExistentialQuantification
-  -- extra-lib-dirs:      /home/armored/protocolImplementation/protocolImplementation/shared/bytestringJSON/
+  --extra-lib-dirs:      /home/armored/protocolImplementation/protocolImplementation/shared/bytestringJSON/
   
-  build-depends:       base >=4.7 && <4.8,
-                       binary >=0.7 && <0.8,
-                       bytestring >=0.10 && <0.11,
+  build-depends:       base,
+                       binary,
+                       bytestring,
                        random,
-                       network >=2.4 && <2.5,
+                       network,
                        HsOpenSSL,
                        SHA,
-                       RSA >= 2.1.0.1,
+                       RSA,
                        crypto-api,
                        aeson,
                        bytestring-json,
                        unordered-containers
 
- -- hs-source-dirs:      /home/armored/protocolImplementation/protocolImplementation/shared/bytestringJSON/
+  hs-source-dirs:     
 
   default-language:    Haskell2010
