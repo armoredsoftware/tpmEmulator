@@ -1,0 +1,43 @@
+[1 of 2] Compiling Main             ( /tmp/stack13912/HsOpenSSL-0.11.4.6/Setup.hs, /tmp/stack13912/HsOpenSSL-0.11.4.6/.stack-work/dist/x86_64-linux/Cabal-1.22.5.0/setup/Main.o )
+[2 of 2] Compiling StackSetupShim   ( /home/user/.stack/setup-exe-src/setup-shim-mPHDZzAJ.hs, /tmp/stack13912/HsOpenSSL-0.11.4.6/.stack-work/dist/x86_64-linux/Cabal-1.22.5.0/setup/StackSetupShim.o )
+Linking /tmp/stack13912/HsOpenSSL-0.11.4.6/.stack-work/dist/x86_64-linux/Cabal-1.22.5.0/setup/setup ...
+Configuring HsOpenSSL-0.11.4.6...
+Building HsOpenSSL-0.11.4.6...
+Preprocessing library HsOpenSSL-0.11.4.6...
+[ 1 of 33] Compiling OpenSSL.SSL.Option ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/SSL/Option.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/SSL/Option.o )
+[ 2 of 33] Compiling OpenSSL.ERR      ( OpenSSL/ERR.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/ERR.o )
+[ 3 of 33] Compiling OpenSSL.Stack    ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Stack.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Stack.o )
+[ 4 of 33] Compiling OpenSSL.DH.Internal ( OpenSSL/DH/Internal.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/DH/Internal.o )
+[ 5 of 33] Compiling OpenSSL.Objects  ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Objects.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Objects.o )
+[ 6 of 33] Compiling OpenSSL.EVP.Base64 ( OpenSSL/EVP/Base64.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Base64.o )
+[ 7 of 33] Compiling OpenSSL.Utils    ( OpenSSL/Utils.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Utils.o )
+[ 8 of 33] Compiling OpenSSL.EVP.Internal ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Internal.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Internal.o )
+[ 9 of 33] Compiling OpenSSL.EVP.Cipher ( OpenSSL/EVP/Cipher.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Cipher.o )
+[10 of 33] Compiling OpenSSL.EVP.Digest ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Digest.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Digest.o )
+[11 of 33] Compiling OpenSSL.Cipher   ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Cipher.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Cipher.o )
+[12 of 33] Compiling OpenSSL.BIO      ( OpenSSL/BIO.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/BIO.o )
+[13 of 33] Compiling OpenSSL.Random   ( OpenSSL/Random.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Random.o )
+[14 of 33] Compiling OpenSSL.BN       ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/BN.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/BN.o )
+[15 of 33] Compiling OpenSSL.RSA      ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/RSA.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/RSA.o )
+[16 of 33] Compiling OpenSSL.DER      ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/DER.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/DER.o )
+[17 of 33] Compiling OpenSSL.DSA      ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/DSA.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/DSA.o )
+[18 of 33] Compiling OpenSSL.EVP.PKey ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/PKey.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/PKey.o )
+[19 of 33] Compiling OpenSSL.EVP.Open ( OpenSSL/EVP/Open.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Open.o )
+[20 of 33] Compiling OpenSSL.EVP.Seal ( OpenSSL/EVP/Seal.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Seal.o )
+[21 of 33] Compiling OpenSSL.EVP.Sign ( OpenSSL/EVP/Sign.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Sign.o )
+[22 of 33] Compiling OpenSSL.EVP.Verify ( OpenSSL/EVP/Verify.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/EVP/Verify.o )
+[23 of 33] Compiling OpenSSL.DH       ( OpenSSL/DH.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/DH.o )
+[24 of 33] Compiling OpenSSL.ASN1     ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/ASN1.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/ASN1.o )
+[25 of 33] Compiling OpenSSL.X509.Name ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509/Name.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509/Name.o )
+[26 of 33] Compiling OpenSSL.X509     ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509.o )
+[27 of 33] Compiling OpenSSL.X509.Request ( OpenSSL/X509/Request.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509/Request.o )
+[28 of 33] Compiling OpenSSL.X509.Revocation ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509/Revocation.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509/Revocation.o )
+[29 of 33] Compiling OpenSSL.X509.Store ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509/Store.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/X509/Store.o )
+[30 of 33] Compiling OpenSSL.PKCS7    ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/PKCS7.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/PKCS7.o )
+[31 of 33] Compiling OpenSSL.PEM      ( OpenSSL/PEM.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/PEM.o )
+[32 of 33] Compiling OpenSSL.Session  ( .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Session.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL/Session.o )
+[33 of 33] Compiling OpenSSL          ( OpenSSL.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/OpenSSL.o )
+In-place registering HsOpenSSL-0.11.4.6...
+Installing library in
+/home/user/.stack/snapshots/x86_64-linux/lts-6.31/7.10.3/lib/x86_64-linux-ghc-7.10.3/HsOpenSSL-0.11.4.6-I7jaXCOIXfU4y1PEdk4nTI
+Registering HsOpenSSL-0.11.4.6...

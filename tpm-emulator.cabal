@@ -51,6 +51,6 @@ library
                        bytestring-json,
                        unordered-containers
 
-  hs-source-dirs:     
+--  hs-source-dirs:     
 
   default-language:    Haskell2010
