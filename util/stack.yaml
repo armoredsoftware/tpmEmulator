@@ -1,6 +1,6 @@
 resolver: lts-6.31
 packages:
 - '.'
-- '../tpmEmulator'
-- '../protocolImplementation/shared/bytestringJSON'
+- '../'
+- '../../protocolImplementation/shared/bytestringJSON'
 extra-deps: []

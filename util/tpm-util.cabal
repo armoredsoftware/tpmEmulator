@@ -13,7 +13,9 @@ build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
 
-library
+executable TPMUtil
+
+--library
 --hs-source-dirs:      
   exposed-modules:     TPMUtil
   build-depends:       base >= 4.7 && < 5,
@@ -23,6 +25,7 @@ library
 
                        tpm-emulator
 		       
+  main-is:            Main.hs	       		       
   default-language:    Haskell2010
 
 source-repository head

@@ -7,8 +7,6 @@ import Data.Word
 import Data.Binary
 import Codec.Crypto.RSA hiding (sign, verify)
 
-main = takeInit
-
 tpm :: TPMSocket
 tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
 
@@ -23,6 +21,7 @@ aikPass = "i"
 
 takeInit :: IO TPM_PUBKEY
 takeInit = do
+  putStrLn "Before forceclearrrr"
   tpm_forceclear tpm
   {-sOwner <- tpm_getcap_owner tpm
   when (hasOwner == False) $ do

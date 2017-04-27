@@ -49,6 +49,7 @@ tpm_logging_socket f = TPMSocket f True
 tpm_socket_open tpm = do
     sock <- socket AF_UNIX Stream 0
     connect sock (SockAddrUnix tpm)
+    P.putStrLn "OPENED SOCKET!"
     return sock
 
 -------------------------------------------------------------------------------
