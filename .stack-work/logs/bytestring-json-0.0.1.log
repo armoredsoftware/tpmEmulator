@@ -1,6 +1,6 @@
 Configuring bytestring-json-0.0.1...
 Preprocessing library bytestring-json-0.0.1...
-[1 of 1] Compiling ByteStringJSON   ( ByteStringJSON.hs, .stack-work/dist/x86_64-linux-tinfo6/Cabal-1.22.5.0/build/ByteStringJSON.o )
+[1 of 1] Compiling ByteStringJSON   ( ByteStringJSON.hs, .stack-work/dist/x86_64-linux/Cabal-1.22.5.0/build/ByteStringJSON.o )
 
 ByteStringJSON.hs:13:1: Warning: Tab character
 
@@ -13,5 +13,5 @@ ByteStringJSON.hs:42:1: Warning: Tab character
 ByteStringJSON.hs:47:1: Warning: Tab character
 In-place registering bytestring-json-0.0.1...
 Installing library in
-/home/user/stackToplevel/tpmEmulator/.stack-work/install/x86_64-linux-tinfo6/lts-6.31/7.10.3/lib/x86_64-linux-ghc-7.10.3/bytestring-json-0.0.1-87ZjjQxkKEn4btIgMeFROC
+/home/user/stackTopLevel/tpmEmulator/.stack-work/install/x86_64-linux/lts-6.31/7.10.3/lib/x86_64-linux-ghc-7.10.3/bytestring-json-0.0.1-87ZjjQxkKEn4btIgMeFROC
 Registering bytestring-json-0.0.1...

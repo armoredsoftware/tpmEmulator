@@ -1,4 +1,8 @@
 module Main where
 import TPMUtil
 
-main = takeInit
+takeMain = takeInit
+
+main :: IO ()
+main = do k <- takeInit;
+          return ();
