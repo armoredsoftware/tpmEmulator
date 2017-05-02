@@ -30,6 +30,11 @@ exportCurrentComp = do
   currentComp <- getCurrentComp
   exportGoldenComp currentComp
 
+pcrProvision :: IO ()
+pcrProvision =
+  {- TODO: do reset, golden hashing into PCRs here -}
+  exportCurrentComp
+
 getCurrentComp :: IO TPM_PCR_COMPOSITE
 getCurrentComp = do
   let list = [0..23] :: [Word8]

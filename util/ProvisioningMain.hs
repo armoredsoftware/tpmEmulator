@@ -8,7 +8,8 @@ main :: IO ()
 main = do
   putStrLn "START of provisioning main"
 
-  ekProvision
+  pcrProvision
+  --ekProvision
   --exportCurrentComp
   --exportCAKeys
 
