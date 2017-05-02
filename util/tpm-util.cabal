@@ -13,11 +13,11 @@ build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
 
-executable TPMUtil
+executable ProvisioningMain
 
 --library
 --hs-source-dirs:
---  exposed-modules:     TPMUtil
+  other-modules:     TPMUtil, Keys, Provisioning
   build-depends:       base >= 4.7 && < 5,
                        binary,
                        bytestring,
@@ -29,11 +29,11 @@ executable TPMUtil
 
                        tpm-emulator
 		       
-  main-is:            Main.hs	       		       
+  main-is:            ProvisioningMain.hs	       		       
 
 library
   hs-source-dirs: ./     
-  exposed-modules:     TPMUtil, Keys
+  exposed-modules:     TPMUtil, Keys, Provisioning
   build-depends:       base >= 4.7 && < 5,
                        binary,
                        bytestring,

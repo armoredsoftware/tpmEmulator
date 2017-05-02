@@ -15,7 +15,6 @@ import Provisioning
 
 
 
-
 {-
 caAtt_CA :: AikContents -> Proto (CipherText, CipherText)
 caAtt_CA signedContents = do
@@ -53,7 +52,7 @@ caEntity_Att {-dList-} nApp pcrSelect = do
   let caCert :: (SignedData TPM_PUBKEY)
       caCert = realDecrypt sessKey kEncBlob
 
-      quoteExData = []
+      quoteExData = [nApp]
   (pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
   let response = ({-evidence, -}nApp, pcrComp, caCert, qSig)
 

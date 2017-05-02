@@ -194,7 +194,7 @@ tpmAct_Id iKeyHandle actInput = do
                 iKeyHandle iPass oPass actInput
   return sessionKey
 
-tpmQuote :: TPM_KEY_HANDLE -> TPM_PCR_SELECTION -> [Int] {-[ArmoredData]-}
+tpmQuote :: Binary a => TPM_KEY_HANDLE -> TPM_PCR_SELECTION -> [a] {-[ArmoredData]-}
          -> IO (TPM_PCR_COMPOSITE, Signature)
 tpmQuote qKeyHandle pcrSelect exDataList = do
   let evBlob = packImpl exDataList

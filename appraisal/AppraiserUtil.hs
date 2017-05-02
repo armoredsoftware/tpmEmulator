@@ -8,38 +8,9 @@ import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 
 import TPM
 import TPMUtil
-import Keys
 import AttesterUtil (caEntity_Att)
-
-{-
-type Nonce = Int
-type SymmKey = TPM_SYMMETRIC_KEY
-type CipherText = ByteString;
-type PrivateKey = C.PrivateKey --ByteString;
-type PublicKey = C.PublicKey --ByteString;
-type Signature = ByteString;
-data SignedData a = SignedData {
-  dat :: a,
-  sig :: Signature
-} deriving (Eq, Show)
-type AikContents = SignedData TPM_IDENTITY_CONTENTS
--}
-
-
-{-appCommInit :: Channel -> Int -> IO ProtoEnv
-appCommInit attChan protoId {-domid-} = do
-  --attChan <- client_init domid
-  let myInfo = EntityInfo "Appraiser" 22 attChan
-      attInfo = EntityInfo "Attester" 22 attChan
-      mList = [(0, myInfo), (1, attInfo)]
-      ents = M.fromList mList
-  (attPub,myPri) <- generateArmoredKeyPair --Currently not used
-  --attPub <-getBPubKey
-  let pubs = M.fromList [(1,attPub)]
-
-
-  return $ ProtoEnv 0 myPri ents pubs 0 0 0 protoId Nothing
--}
+import Keys
+import Provisioning
 
 --main = appmain' 1
 
@@ -51,8 +22,7 @@ appmain' {-protoId chan-} = do
       nonce = 34
   (n, comp, cert, qSig) <- caEntity_Att nonce pcrSelect
   evaluate (nonce, pcrSelect) (n, comp, cert, qSig)
-  return ""
-
+  
   {-
   str <- case eitherResult of
               Left s -> return $ "Error occured: " ++ s
@@ -68,17 +38,17 @@ appmain' {-protoId chan-} = do
 
 evaluate :: {-Int -> -}({-[EvidenceDescriptor],-} Nonce, TPM_PCR_SELECTION) ->
             ({-Evidence,-} Nonce, TPM_PCR_COMPOSITE,
-             (SignedData TPM_PUBKEY), Signature) -> IO (){-String-}
+             (SignedData TPM_PUBKEY), Signature) -> IO String
 evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
   ({-ev, -}nonceResp, pcrComp, cert@(SignedData aikPub aikSig), qSig) = do
   --debugPrint "Inside Evaluate" --sequence $ [logf, putStrLn] <*> (pure ( "Inside Evaluate..."))
   caPublicKey <- getCAPublicKey
-  return ()
 
-  {-
+  
   let blobEvidence :: ByteString
-      blobEvidence = packImpl [AEvidence ev, ANonce nonceResp,
-                               ASignedData $ SignedData ( ATPM_PUBKEY (dat cert)) (sig cert)] --pubKey
+      {-blobEvidence = packImpl [AEvidence ev, ANonce nonceResp,
+                               ASignedData $ SignedData ( ATPM_PUBKEY (dat cert)) (sig cert)] --pubKey -}
+      blobEvidence = packImpl [nonceResp]
       evBlobSha1 =  bytestringDigest $ sha1 blobEvidence
 
       quoteInfo :: TPM_QUOTE_INFO
@@ -92,7 +62,7 @@ evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
   goldenPcrComposite <- readGoldenComp
 
   let r4 = pcrComp == goldenPcrComposite
-      intVal = let m0 = Prelude.head ev in
+      {-intVal = let m0 = Prelude.head ev in
                  case m0 of
                    M0 i -> i
                    _ -> error "Measurement descriptor not implemented!!"
@@ -110,34 +80,33 @@ evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
         2 -> let goldenPassword = "\"12345\\000\\000\\000\\260\\005\"" in
           or [intVal == 0,  and [intVal == 1, passString == goldenPassword]]
 
-
-  putStrLn $ show ev
-  sequence $ [logf, putStrLn] <*> (pure ("CACert Signature: " ++ (show r1)))
-  sequence $ [logf, putStrLn] <*> (pure ( "Quote Package Signature: " ++ (show r2)  ))
-  sequence $ [logf, putStrLn] <*> (pure ( "Nonce: " ++ (show r3)))
-  sequence $ [logf, putStrLn] <*> (pure ( "PCR Values: " ++ (show r4)))
+      -}
+  --putStrLn $ show ev
+  sequence $ [{-logf, -}putStrLn] <*> (pure ("CACert Signature: " ++ (show r1)))
+  sequence $ [{-logf, -}putStrLn] <*> (pure ( "Quote Package Signature: " ++ (show r2)  ))
+  sequence $ [{-logf, -}putStrLn] <*> (pure ( "Nonce: " ++ (show r3)))
+  sequence $ [{-logf, -}putStrLn] <*> (pure ( "PCR Values: " ++ (show r4)))
+  {-
   let guardString = case pId of
         1 -> "(Value >= 20?)"
         2 -> "(session == 0 OR session == 1 AND password == \"12345\":  False implies a buffer overflow)"
   if (or[pId == 1, pId == 2] )
-    then sequence ([logf, putStrLn] <*> (pure ("Evidence" ++ guardString ++ ": " ++ (show r5))))
+    then sequence ([{-logf, -}putStrLn] <*> (pure ("Evidence" ++ guardString ++ ": " ++ (show r5))))
     else return [()]
 
   case pId of
-    1 -> sequence ([logf, putStrLn] <*> (pure ("(Evidence Value: " ++ (show intVal) ++ ")")))
-    2 -> sequence ([logf, putStrLn] <*> (pure ("(Session: " ++ (show intVal) ++ ", \n Password: " ++ passString ++ ")")))
+    1 -> sequence ([{-logf, -}putStrLn] <*> (pure ("(Evidence Value: " ++ (show intVal) ++ ")")))
+    2 -> sequence ([{-logf, -}putStrLn] <*> (pure ("(Session: " ++ (show intVal) ++ ", \n Password: " ++ passString ++ ")")))
 
 
     _ -> return [()]
 
-  --if (or[pId == 1, pId == 2] ) then sequence ([logf, putStrLn] <*> (pure ("Evidence: " ++ (show r6) ++ ", Password Value: " ++ (show passString) ++ ", session Int Value: " ++ (show evVal)))) else return [()]
-  return $ case (and [r1, r2, r3, r4, r5 {-,r6-}]) of
+-}
+
+  --if (or[pId == 1, pId == 2] ) then sequence ([{-logf, -}putStrLn] <*> (pure ("Evidence: " ++ (show r6) ++ ", Password Value: " ++ (show passString) ++ ", session Int Value: " ++ (show evVal)))) else return [()]
+  return $ case (and [r1, r2, r3, r4{-, r5, r6-}]) of
     True -> "All checks succeeded"
     False -> "At least one check failed"
-
-
-
--}
 
 
 
@@ -178,7 +147,7 @@ caEntity_App :: EvidenceDescriptor -> Nonce -> TPM_PCR_SELECTION ->
 caEntity_App d nonceA pcrSelect = do
  -- let nonceA = 34
   pId <- protoIs
-  liftIO $ sequence $ [logf, putStrLn] <*> (pure ( "Got here......."))
+  liftIO $ sequence $ [{-logf, -}putStrLn] <*> (pure ( "Got here......."))
   let request = case pId of
         _ -> [AAEvidenceDescriptor d, ANonce nonceA, ATPM_PCR_SELECTION pcrSelect]
         {-2 -> [ANonce nonceA, ATPM_PCR_SELECTION pcrSelect]
@@ -346,10 +315,10 @@ caEntity_Att = do
 
       let caCert :: (SignedData TPM_PUBKEY)
           caCert = realDecrypt sessKey kEncBlob
-      liftIO $ sequence $ [logf, putStrLn] <*> (pure ( "Sending Request to Measurer"))
+      liftIO $ sequence $ [{-logf, -}putStrLn] <*> (pure ( "Sending Request to Measurer"))
       evidence <- caAtt_Mea dList
 
-      liftIO $ sequence $ [logf, putStrLn] <*> (pure ( "Received response from Measurer: " ++ (show evidence)))
+      liftIO $ sequence $ [{-logf, -}putStrLn] <*> (pure ( "Received response from Measurer: " ++ (show evidence)))
 
       let quoteExData =
             [AEvidence evidence,
