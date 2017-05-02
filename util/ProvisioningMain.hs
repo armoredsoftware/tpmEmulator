@@ -10,7 +10,6 @@ main = do
 
   pcrProvision
   --ekProvision
-  --exportCurrentComp
   --exportCAKeys
 
   return ()

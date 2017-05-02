@@ -19,7 +19,8 @@ caEntity_Att :: {-EvidenceDescriptor -> -} Nonce -> TPM_PCR_SELECTION ->
 caEntity_Att {-dList-} nApp pcrSelect = do
 
   --TODO:  Perform measurements into PCRs here...
-  
+
+  pcrReset
   {-pcrReset
   pcrModify "a"-}
 

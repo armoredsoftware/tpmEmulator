@@ -31,8 +31,9 @@ exportCurrentComp = do
   exportGoldenComp currentComp
 
 pcrProvision :: IO ()
-pcrProvision =
+pcrProvision = do
   {- TODO: do reset, golden hashing into PCRs here -}
+  pcrReset
   exportCurrentComp
 
 getCurrentComp :: IO TPM_PCR_COMPOSITE

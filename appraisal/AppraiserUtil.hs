@@ -47,6 +47,9 @@ evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
   goldenPcrComposite <- readGoldenComp
 
   let r4 = pcrComp == goldenPcrComposite
+  putStrLn ("pcrComp: " ++ (show pcrComp))
+  putStrLn "\n\n\n\n\n\n"
+  putStrLn ("goldenPcrComposite: " ++ (show goldenPcrComposite))
 
   sequence $ [{-logf, -}putStrLn] <*> (pure ("CACert Signature: " ++ (show r1)))
   sequence $ [{-logf, -}putStrLn] <*> (pure ( "Quote Package Signature: " ++ (show r2)  ))
