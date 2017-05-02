@@ -22,6 +22,10 @@ executable TPMUtil
                        binary,
                        bytestring,
                        RSA,
+                       SHA,
+                       cipher-aes,
+                       crypto-api,
+                       random,
 
                        tpm-emulator
 		       
@@ -29,12 +33,16 @@ executable TPMUtil
 
 library
   hs-source-dirs: ./     
-  exposed-modules:     TPMUtil
+  exposed-modules:     TPMUtil, Keys
   build-depends:       base >= 4.7 && < 5,
                        binary,
                        bytestring,
                        RSA,
-
+                       SHA,
+                       cipher-aes,
+                       crypto-api,
+                       random,
+                       
                        tpm-emulator
 		       
   --main-is:            Main.hs

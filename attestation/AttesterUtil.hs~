@@ -1,8 +1,0 @@
-module AttesterUtil where
-
-import TPM
-import TPMUtil
-
-type Nonce = Int
-
-a :: Nonce = 3

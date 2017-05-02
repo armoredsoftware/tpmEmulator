@@ -1,6 +1,0 @@
-resolver: lts-6.31
-packages:
-- '.'
-- '../util'
-- '../../protocolImplementation/shared/bytestringJSON'
-extra-deps: []

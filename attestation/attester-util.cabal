@@ -17,11 +17,14 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      ./    
-  exposed-modules:     AttesterUtil
+  exposed-modules:     AttesterUtil, Provisioning
   build-depends:       base >= 4.7 && < 5,
                        binary,
                        bytestring,
                        RSA,
+                       SHA,
+                       crypto-api,
+                       random,
                        cipher-aes,
                        
                        tpm-emulator,

@@ -5,7 +5,9 @@ import TPM
 import Data.ByteString.Lazy  hiding (putStrLn)
 import Data.Word
 import Data.Binary
-import Codec.Crypto.RSA hiding (sign, verify)
+import Codec.Crypto.RSA as C hiding (sign, verify)
+import Data.Digest.Pure.SHA (bytestringDigest, sha1)
+import Crypto.Cipher.AES
 
 tpm :: TPMSocket
 tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
@@ -95,3 +97,107 @@ pcrReset = do
   return val
 
 pcrNum = 23
+
+
+
+
+
+
+
+
+
+
+
+{- Attester / Appraiser shared utils TODO:  Move these to separate library? -}
+type Nonce = Int
+type SymmKey = TPM_SYMMETRIC_KEY
+type CipherText = ByteString;
+--type PrivateKey = C.PrivateKey --ByteString;
+--type PublicKey = C.PublicKey --ByteString;
+type Signature = ByteString;
+data SignedData a = SignedData {
+  dat :: a,
+  sig :: Signature
+} deriving (Eq, Show)
+
+instance (Binary a) => Binary (SignedData a) where
+  put (SignedData a b) =
+    do
+      put a
+      put b
+
+  get = do a <- get
+           b <- get
+           return $ SignedData a b
+           
+type AikContents = SignedData TPM_IDENTITY_CONTENTS
+
+
+
+a :: Nonce
+a = 3
+
+
+generateNonce :: IO Nonce
+generateNonce = do
+  return 56 --faked
+
+checkNonce :: Nonce -> Nonce -> IO ()
+checkNonce expected actual = do
+  case (expected == actual) of
+    True -> return ()
+    False -> putStrLn "Nonce check failed"
+
+
+--Symmetric Key decryption
+realDecrypt :: (Binary a) => SymmKey -> CipherText -> a
+realDecrypt sessKey blob = let
+  keyBytes = tpmSymmetricData sessKey
+  strictKey = toStrict keyBytes
+  aes = initAES strictKey
+  ctr = strictKey
+  decryptedBytes = decryptCTR aes ctr (toStrict blob)
+  lazy = fromStrict decryptedBytes in
+  (decode lazy)
+
+realSign :: PrivateKey -> ByteString -> Signature --paramaterize over hash?
+realSign priKey bytes = C.rsassa_pkcs1_v1_5_sign C.hashSHA1 priKey bytes --Concrete implementation plugs in here
+
+realVerify :: PublicKey -> ByteString -> Signature -> Bool
+realVerify pubKey m s = C.rsassa_pkcs1_v1_5_verify C.hashSHA1 pubKey m s
+
+--Concrete packing(well-defined strategy for combining elements in preparation for encryption/signing) implementation
+packImpl :: (Binary a) => [a] -> ByteString
+packImpl as = encode as --mconcat bslist
+ --where bslist = map tobs as
+
+--Concrete unpacking implementation
+unpackImpl :: Binary a => ByteString -> [a]
+unpackImpl bs = decode bs
+
+
+iPass = tpm_digest_pass aikPass
+oPass = tpm_digest_pass ownerPass
+
+tpmMk_Id :: IO (TPM_KEY_HANDLE, AikContents)
+tpmMk_Id = do
+  (aikHandle, iSig) <- makeAndLoadAIK
+  aikPub <- attGetPubKey aikHandle iPass
+  let aikContents = TPM_IDENTITY_CONTENTS iPass aikPub
+  return (aikHandle, SignedData aikContents iSig)
+
+tpmAct_Id :: TPM_KEY_HANDLE -> CipherText -> IO SymmKey
+tpmAct_Id iKeyHandle actInput = do
+  iShn <- tpm_session_oiap tpm
+  oShn <- tpm_session_oiap tpm
+  sessionKey <- tpm_activateidentity tpm iShn oShn
+                iKeyHandle iPass oPass actInput
+  return sessionKey
+
+tpmQuote :: TPM_KEY_HANDLE -> TPM_PCR_SELECTION -> [Int] {-[ArmoredData]-}
+         -> IO (TPM_PCR_COMPOSITE, Signature)
+tpmQuote qKeyHandle pcrSelect exDataList = do
+  let evBlob = packImpl exDataList
+      evBlobSha1 = bytestringDigest $ sha1 evBlob
+  (comp, sig) <- mkQuote qKeyHandle iPass pcrSelect evBlobSha1
+  return (comp, sig)
