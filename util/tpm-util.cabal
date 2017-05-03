@@ -26,6 +26,7 @@ executable ProvisioningMain
                        cipher-aes,
                        crypto-api,
                        random,
+                       cryptohash,
 
                        tpm-emulator
 		       
@@ -42,6 +43,7 @@ library
                        cipher-aes,
                        crypto-api,
                        random,
+                       cryptohash,
                        
                        tpm-emulator
 		       

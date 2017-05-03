@@ -2,12 +2,14 @@ module TPMUtil where
 
 import TPM
 
-import Data.ByteString.Lazy  hiding (putStrLn)
+import Data.ByteString.Lazy as L  hiding (putStrLn)
+import Data.ByteString as S hiding (putStrLn)
 import Data.Word
 import Data.Binary
 import Codec.Crypto.RSA as C hiding (sign, verify)
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import Crypto.Cipher.AES
+import Crypto.Hash.SHA1 (hashlazy)
 
 tpm :: TPMSocket
 tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
@@ -44,7 +46,7 @@ mkTPMRequest xs = do
   let selection = tpm_pcr_selection max xs in
     selection
 
-makeAndLoadAIK :: IO (TPM_KEY_HANDLE, ByteString)
+makeAndLoadAIK :: IO (TPM_KEY_HANDLE, L.ByteString)
 makeAndLoadAIK = do
   sShn <- tpm_session_oiap tpm
   oShn <- tpm_session_osap tpm oPass oKty ownerHandle
@@ -75,7 +77,7 @@ attGetPubKey handle pass = do
   return pubKey
 
 mkQuote :: TPM_KEY_HANDLE -> TPM_DIGEST -> TPM_PCR_SELECTION
-                  -> ByteString -> IO (TPM_PCR_COMPOSITE, ByteString)
+                  -> L.ByteString -> IO (TPM_PCR_COMPOSITE, L.ByteString)
 mkQuote qKeyHandle qKeyPass pcrSelect exData = do
    quoteShn <- tpm_session_oiap tpm
    putStrLn "Before quote packed and generatedddddddddddddddddddddd"
@@ -98,7 +100,8 @@ pcrReset = do
 
 pcrNum = 23
 
-
+myHash :: FilePath -> IO S.ByteString
+myHash = fmap hashlazy . L.readFile 
 
 
 
@@ -111,10 +114,10 @@ pcrNum = 23
 {- Attester / Appraiser shared utils TODO:  Move these to separate library? -}
 type Nonce = Int
 type SymmKey = TPM_SYMMETRIC_KEY
-type CipherText = ByteString;
---type PrivateKey = C.PrivateKey --ByteString;
---type PublicKey = C.PublicKey --ByteString;
-type Signature = ByteString;
+type CipherText = L.ByteString;
+--type PrivateKey = C.PrivateKey --L.ByteString;
+--type PublicKey = C.PublicKey --L.ByteString;
+type Signature = L.ByteString;
 data SignedData a = SignedData {
   dat :: a,
   sig :: Signature
@@ -160,19 +163,19 @@ realDecrypt sessKey blob = let
   lazy = fromStrict decryptedBytes in
   (decode lazy)
 
-realSign :: PrivateKey -> ByteString -> Signature --paramaterize over hash?
+realSign :: PrivateKey -> L.ByteString -> Signature --paramaterize over hash?
 realSign priKey bytes = C.rsassa_pkcs1_v1_5_sign C.hashSHA1 priKey bytes --Concrete implementation plugs in here
 
-realVerify :: PublicKey -> ByteString -> Signature -> Bool
+realVerify :: PublicKey -> L.ByteString -> Signature -> Bool
 realVerify pubKey m s = C.rsassa_pkcs1_v1_5_verify C.hashSHA1 pubKey m s
 
 --Concrete packing(well-defined strategy for combining elements in preparation for encryption/signing) implementation
-packImpl :: (Binary a) => [a] -> ByteString
+packImpl :: (Binary a) => [a] -> L.ByteString
 packImpl as = encode as --mconcat bslist
  --where bslist = map tobs as
 
 --Concrete unpacking implementation
-unpackImpl :: Binary a => ByteString -> [a]
+unpackImpl :: Binary a => L.ByteString -> [a]
 unpackImpl bs = decode bs
 
 
