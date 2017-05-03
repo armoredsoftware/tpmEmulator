@@ -5,6 +5,7 @@ import Data.ByteString.Lazy hiding (map, putStrLn)
 import Crypto.Cipher.AES
 import qualified Codec.Crypto.RSA as C
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
+import System.Process (system)
 
 
 import TPM
@@ -18,11 +19,14 @@ caEntity_Att :: {-EvidenceDescriptor -> -} Nonce -> TPM_PCR_SELECTION ->
                        (SignedData TPM_PUBKEY), Signature)
 caEntity_Att {-dList-} nApp pcrSelect = do
 
-  --TODO:  Perform measurements into PCRs here...
-
   pcrReset
-  {-pcrReset
-  pcrModify "a"-}
+  let fn = "/home/user/stackTopLevel/tpmEmulator/attestation/App1"
+  h <- myHash fn
+  putStrLn $ "Hash of App1: \n" ++ (show (fromStrict h))
+  val <- pcrExtendDemo (fromStrict h)
+  putStrLn "Extended into PCR.  New PCR value:"
+  putStrLn (show val)
+  system fn
 
   (iKeyHandle, aikContents) <- tpmMk_Id
   (ekEncBlob, kEncBlob) <- caEntity_CA aikContents

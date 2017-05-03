@@ -3,4 +3,5 @@ packages:
 - '.'
 - '../'
 - '../../protocolImplementation/shared/bytestringJSON'
+- './keys'
 extra-deps: []

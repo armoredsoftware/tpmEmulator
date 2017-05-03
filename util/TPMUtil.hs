@@ -9,7 +9,7 @@ import Data.Binary
 import Codec.Crypto.RSA as C hiding (sign, verify)
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import Crypto.Cipher.AES
-import Crypto.Hash.SHA1 (hashlazy)
+--import Crypto.Hash.SHA1 (hashlazy)
 
 tpm :: TPMSocket
 tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
@@ -90,6 +90,9 @@ mkQuote qKeyHandle qKeyPass pcrSelect exData = do
 pcrModify :: String -> IO TPM_PCRVALUE
 pcrModify val = tpm_pcr_extend_with tpm (fromIntegral pcrNum) val
 
+pcrExtendDemo :: L.ByteString -> IO TPM_PCRVALUE
+pcrExtendDemo bs = tpm_pcr_extend tpm (fromIntegral pcrNum) (TPM_DIGEST bs)
+
 pcrReset :: IO TPM_PCRVALUE
 pcrReset = do
   tot <- tpm_getcap_pcrs tpm
@@ -101,7 +104,15 @@ pcrReset = do
 pcrNum = 23
 
 myHash :: FilePath -> IO S.ByteString
-myHash = fmap hashlazy . L.readFile 
+myHash fp = do
+  fb <- L.readFile fp
+  let bs = bytestringDigest $ sha1 fb
+  return (L.toStrict bs)
+  
+  --return (bytestringDigest $ sha1 fb)
+  
+--myHash = fmap bytestringDigest . sha1 . L.readFile
+--myHash = fmap hashlazy . L.readFile 
 
 
 

@@ -1,0 +1,8 @@
+resolver: lts-6.31
+packages:
+- '.'
+- '../../'
+- '../keys/'
+- '../'
+- '../../../protocolImplementation/shared/bytestringJSON/'
+extra-deps: []

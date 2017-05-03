@@ -13,39 +13,23 @@ build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
 
-executable ProvisioningMain
-
---library
---hs-source-dirs:
-  other-modules:     TPMUtil, Keys, Provisioning
-  build-depends:       base >= 4.7 && < 5,
-                       binary,
-                       bytestring,
-                       RSA,
-                       SHA,
-                       cipher-aes,
-                       crypto-api,
-                       random,
-                       cryptohash,
-
-                       tpm-emulator
-		       
-  main-is:            ProvisioningMain.hs	       		       
-
 library
   hs-source-dirs: ./     
-  exposed-modules:     TPMUtil, Keys, Provisioning
+  exposed-modules:     TPMUtil
   build-depends:       base >= 4.7 && < 5,
                        binary,
                        bytestring,
                        RSA,
                        SHA,
                        cipher-aes,
-                       crypto-api,
+                       --crypto-api,
                        random,
-                       cryptohash,
+                       --cryptohash,
+                       --cryptonite,
+                       process,
                        
-                       tpm-emulator
+                       tpm-emulator,
+                       keys
 		       
   --main-is:            Main.hs
 --source-repository head

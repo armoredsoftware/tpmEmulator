@@ -7,6 +7,8 @@ import Keys
 import System.IO
 import Data.Word
 import Data.Binary
+import Data.ByteString.Lazy (fromStrict)
+import System.Process (system)
 
 goldenCompFileName :: String
 goldenCompFileName= "goldenPcrComposite.txt"
@@ -34,6 +36,13 @@ pcrProvision :: IO ()
 pcrProvision = do
   {- TODO: do reset, golden hashing into PCRs here -}
   pcrReset
+  let fn = "/home/user/stackTopLevel/tpmEmulator/attestation/App1"
+  h <- myHash fn
+  putStrLn $ "Hash of App1: \n" ++ (show (fromStrict h))
+  val <- pcrExtendDemo (fromStrict h)
+  putStrLn "Extended into PCR.  New PCR value:"
+  putStrLn (show val)
+  system fn
   exportCurrentComp
 
 getCurrentComp :: IO TPM_PCR_COMPOSITE

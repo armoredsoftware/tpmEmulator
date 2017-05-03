@@ -14,6 +14,29 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 --executable AttesterUtil
+executable App2
+
+--library
+--hs-source-dirs:
+  --other-modules:     TPMUtil
+  build-depends:       base >= 4.7 && < 5
+
+                       --tpm-emulator
+		       
+  main-is:            App2.hs
+
+executable App1
+
+--library
+--hs-source-dirs:
+  --other-modules:     TPMUtil
+  build-depends:       base >= 4.7 && < 5,
+                       bytestring,
+                       process,
+
+                       tpm-util
+		       
+  main-is:            App1.hs
 
 library
   hs-source-dirs:      ./    
@@ -26,6 +49,7 @@ library
                        crypto-api,
                        random,
                        cipher-aes,
+                       process,
                        
                        tpm-emulator,
                        tpm-util
