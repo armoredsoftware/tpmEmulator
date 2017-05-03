@@ -3,6 +3,8 @@ packages:
 - '.'
 - '../util'
 - '../'
+- '../util/provisioning/'
+- '../util/keys/'
 - '../../protocolImplementation/shared/bytestringJSON'
 - '../attestation'
 extra-deps: []

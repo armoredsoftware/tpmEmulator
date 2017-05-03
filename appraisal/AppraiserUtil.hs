@@ -14,10 +14,11 @@ import Provisioning
 
 appmain' :: {-Int -> Channel -> -} IO String
 appmain' {-protoId chan-} = do
-  putStrLn "Main of entity Appraiser"
+  putStrLn "Main of entity Appraiser:"
   {-env <- appCommInit chan protoId {-3-} -}
   let pcrSelect = mkTPMRequest [0..23]
       nonce = 34
+  putStrLn $ "Sending Request: ( " ++ (show pcrSelect) ++ ", Nonce ) \n"
   (n, comp, cert, qSig) <- caEntity_Att nonce pcrSelect
   evaluate (nonce, pcrSelect) (n, comp, cert, qSig)
 
@@ -48,8 +49,8 @@ evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
 
   let r4 = pcrComp == goldenPcrComposite
   putStrLn ("pcrComp: " ++ (show pcrComp))
-  putStrLn "\n\n\n\n\n\n"
-  putStrLn ("goldenPcrComposite: " ++ (show goldenPcrComposite))
+  putStrLn "\n\n"
+  putStrLn ("goldenPcrComposite: " ++ (show goldenPcrComposite) ++ "\n")
 
   sequence $ [{-logf, -}putStrLn] <*> (pure ("CACert Signature: " ++ (show r1)))
   sequence $ [{-logf, -}putStrLn] <*> (pure ( "Quote Package Signature: " ++ (show r2)  ))

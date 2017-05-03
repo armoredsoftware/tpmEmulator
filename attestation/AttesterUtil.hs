@@ -19,6 +19,8 @@ caEntity_Att :: {-EvidenceDescriptor -> -} Nonce -> TPM_PCR_SELECTION ->
                        (SignedData TPM_PUBKEY), Signature)
 caEntity_Att {-dList-} nApp pcrSelect = do
 
+  putStrLn "Main of entity Attester:"
+  takeInit
   pcrReset
   let fn = "/home/user/stackTopLevel/tpmEmulator/attestation/App1"
   h <- myHash fn
@@ -28,13 +30,16 @@ caEntity_Att {-dList-} nApp pcrSelect = do
   putStrLn (show val)
   system fn
 
+  --putStrLn "before tpmMK_Idddddd"
   (iKeyHandle, aikContents) <- tpmMk_Id
+  --putStrLn "after tpmMK_Id"
   (ekEncBlob, kEncBlob) <- caEntity_CA aikContents
   sessKey <- tpmAct_Id iKeyHandle ekEncBlob
   let caCert :: (SignedData TPM_PUBKEY)
       caCert = realDecrypt sessKey kEncBlob
 
       quoteExData = [nApp]
+  --putStrLn "before quote"
   (pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
   let response = ({-evidence, -}nApp, pcrComp, caCert, qSig)
 

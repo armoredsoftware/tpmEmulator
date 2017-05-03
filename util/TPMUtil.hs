@@ -25,7 +25,7 @@ aikPass = "i"
 
 takeInit :: IO TPM_PUBKEY
 takeInit = do
-  putStrLn "Before forceclearrrr"
+  --putStrLn "Before forceclearrrr"
   tpm_forceclear tpm
   {-sOwner <- tpm_getcap_owner tpm
   when (hasOwner == False) $ do
@@ -35,7 +35,7 @@ takeInit = do
   tkShn <- tpm_session_oiap tpm
   tpm_takeownership tpm tkShn pubkey oPass sPass
   tpm_session_close tpm tkShn
-  putStrLn "\n\nTPM OWNERSHIP TAKEN\n"
+  putStrLn "\nTPM OWNERSHIP TAKEN\n"
   return pubkey
  where oPass = tpm_digest_pass ownerPass
        sPass = tpm_digest_pass srkPass
@@ -80,7 +80,7 @@ mkQuote :: TPM_KEY_HANDLE -> TPM_DIGEST -> TPM_PCR_SELECTION
                   -> L.ByteString -> IO (TPM_PCR_COMPOSITE, L.ByteString)
 mkQuote qKeyHandle qKeyPass pcrSelect exData = do
    quoteShn <- tpm_session_oiap tpm
-   putStrLn "Before quote packed and generatedddddddddddddddddddddd"
+   --putStrLn "Before quote packed and generatedddddddddddddddddddddd"
    (pcrComp, sig) <- tpm_quote tpm quoteShn qKeyHandle
                              (TPM_NONCE exData) pcrSelect qKeyPass
    tpm_session_close tpm quoteShn

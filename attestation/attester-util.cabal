@@ -52,7 +52,9 @@ library
                        process,
                        
                        tpm-emulator,
-                       tpm-util
+                       tpm-util,
+                       keys,
+                       provisioning
 		       
 --  main-is:            Main.hs	       		       
   default-language:    Haskell2010

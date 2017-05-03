@@ -29,6 +29,8 @@ library
                        
                        tpm-emulator,
                        tpm-util,
+                       provisioning,
+                       keys,
                        attester-util
 		       
 --  main-is:            Main.hs	       		       
