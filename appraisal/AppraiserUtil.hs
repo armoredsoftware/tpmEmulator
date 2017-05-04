@@ -2,7 +2,7 @@ module AppraiserUtil where
 
 import Data.Binary
 import Data.ByteString.Lazy hiding (pack, map, putStrLn)
-import Crypto.Cipher.AES
+--import Crypto.Cipher.AES
 import qualified Codec.Crypto.RSA as C
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 
