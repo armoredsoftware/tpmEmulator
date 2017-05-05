@@ -16,16 +16,6 @@ import Control.Monad
 import Control.Exception
 import Prelude hiding (take,length)
 import qualified Prelude as P
---import qualified Data.Text as T
---import qualified Data.Text.Encoding as TE
---import qualified Data.ByteString.Base64 as Base64
---import ByteStringJSON 
---import Data.Aeson (toJSON, parseJSON, ToJSON,FromJSON, object , (.=), (.:) )
---import qualified Data.Aeson as DA (Value(..), encode, decode, eitherDecode)
---import Control.Applicative ( (<$>), (<*>), pure )
---import qualified Data.HashMap.Strict as HM (member, lookup)
---import Data.Maybe
---import qualified Data.ByteString.Char8 as Char8
 
 -------------------------------------------------------------------------------
 -- Basic data types as defined by section 2.2.1 of the document:

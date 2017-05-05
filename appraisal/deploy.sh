@@ -1,9 +1,16 @@
 #!/bin/bash
 
-cp .stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin/AppMain /home/user/stackTopLevel/tpmEmulator/appraisal/
+sw=.stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin
+te=/home/user/stackTopLevel/tpmEmulator
 
-cp .stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin/ProvisioningMain /home/user/stackTopLevel/tpmEmulator/util/provisioning/
+cp $sw/AppMain $te/appraisal/
 
-cp .stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin/App1 /home/user/stackTopLevel/tpmEmulator/attestation/
+cp $sw/ProvisioningMain $te/util/provisioning/
 
-cp .stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin/App2 /home/user/stackTopLevel/tpmEmulator/attestation/
+cp $sw/App1 $te/attestation/
+cp $sw/App1 $te/attestation/goodApp1
+cp $sw/App2 $te/attestation/
+cp $sw/App2 $te/attestation/goodApp2
+
+cp $sw/BAD_App1 $te/attestation/badApp1
+cp $sw/BAD_App2 $te/attestation/badApp2

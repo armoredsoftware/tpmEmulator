@@ -2,13 +2,13 @@ name:                attester-util
 version:             0.1.0.0
 -- synopsis:
 -- description:
-homepage:            https://github.com/githubuser/helloworld#readme
+--homepage:            https://github.com/githubuser/helloworld#readme
 license:             BSD3
 license-file:        LICENSE
-author:              Author name here
-maintainer:          example@example.com
-copyright:           2017 Author name here
-category:            Web
+author:              Adam Petz (ampetz@ittc.ku.edu)
+maintainer:          ampetz@ittc.ku.edu
+copyright:           2017 Adam Petz
+--category:            Web
 build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
@@ -25,6 +25,17 @@ executable App2
 		       
   main-is:            App2.hs
 
+executable BAD_App2
+
+--library
+--hs-source-dirs:
+  --other-modules:     TPMUtil
+  build-depends:       base >= 4.7 && < 5
+
+                       --tpm-emulator
+		       
+  main-is:            BAD_App2.hs
+
 executable App1
 
 --library
@@ -37,6 +48,19 @@ executable App1
                        tpm-util
 		       
   main-is:            App1.hs
+
+executable BAD_App1
+
+--library
+--hs-source-dirs:
+  --other-modules:     TPMUtil
+  build-depends:       base >= 4.7 && < 5,
+                       bytestring,
+                       process,
+
+                       tpm-util
+		       
+  main-is:            BAD_App1.hs
 
 library
   hs-source-dirs:      ./    
