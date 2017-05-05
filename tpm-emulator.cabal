@@ -47,8 +47,8 @@ library
                        SHA,
                        RSA,
                        crypto-api,
-                       aeson,
-                       bytestring-json,
+                       --aeson,
+                       --bytestring-json,
                        unordered-containers
 
 --  hs-source-dirs:     

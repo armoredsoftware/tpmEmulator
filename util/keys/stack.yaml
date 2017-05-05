@@ -2,5 +2,4 @@ resolver: lts-6.31
 packages:
 - '.'
 - '../../'
-- '../../../protocolImplementation/shared/bytestringJSON/'
 extra-deps: []

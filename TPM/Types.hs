@@ -19,13 +19,13 @@ import qualified Prelude as P
 --import qualified Data.Text as T
 --import qualified Data.Text.Encoding as TE
 --import qualified Data.ByteString.Base64 as Base64
-import ByteStringJSON 
-import Data.Aeson (toJSON, parseJSON, ToJSON,FromJSON, object , (.=), (.:) )
-import qualified Data.Aeson as DA (Value(..), encode, decode, eitherDecode)
-import Control.Applicative ( (<$>), (<*>), pure )
-import qualified Data.HashMap.Strict as HM (member, lookup)
+--import ByteStringJSON 
+--import Data.Aeson (toJSON, parseJSON, ToJSON,FromJSON, object , (.=), (.:) )
+--import qualified Data.Aeson as DA (Value(..), encode, decode, eitherDecode)
+--import Control.Applicative ( (<$>), (<*>), pure )
+--import qualified Data.HashMap.Strict as HM (member, lookup)
 --import Data.Maybe
-import qualified Data.ByteString.Char8 as Char8
+--import qualified Data.ByteString.Char8 as Char8
 
 -------------------------------------------------------------------------------
 -- Basic data types as defined by section 2.2.1 of the document:
@@ -1329,9 +1329,12 @@ data TPM_CAP_VERSION_INFO = TPM_CAP_VERSION {
     } deriving (Show,Eq)
 
 
+{-
 ----------------------------------------------------------------------
 -- JSON INSTANCES-----------------------------------------------------
 ----------------------------------------------------------------------
+
+testpubkey = TPM_STORE_PUBKEY $ fromStrict $ Char8.pack "3434"
 
 -- JSON stuff!
 
@@ -1414,8 +1417,8 @@ instance FromJSON TPM_SYMMETRIC_KEY_PARMS where
   				 <*> o .: "TPM_PCR_SELECTION"
   				 <*> o .: "TPM_NONCE" -}
 instance ToJSON TPM_STORE_PUBKEY where
-	toJSON (TPM_STORE_PUBKEY bs) = object [ "TPM_STORE_PUBKEY" .= encodeToText (toStrict bs) ]
-testpubkey = TPM_STORE_PUBKEY $ fromStrict $ Char8.pack "3434"
+	toJSON (TPM_STORE_PUBKEY bs) = object [ "TPM_STORE_PUBKEY" .= encodeToText (toStrict bs) ] 
+
 instance FromJSON TPM_STORE_PUBKEY where
 	parseJSON (DA.Object o) = TPM_STORE_PUBKEY <$> ((o .: "TPM_STORE_PUBKEY") >>= decodeFromTextL)
 
@@ -1442,3 +1445,4 @@ instance ToJSON TPM_NONCE where
   toJSON (TPM_NONCE n) = object ["TPM_NONCE" .= encodeToText (toStrict n)]
 instance FromJSON TPM_NONCE where
 	parseJSON (DA.Object o) = TPM_NONCE <$> ((o .: "TPM_NONCE") >>= decodeFromTextL)
+-}

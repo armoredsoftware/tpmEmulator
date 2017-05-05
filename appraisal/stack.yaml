@@ -5,6 +5,5 @@ packages:
 - '../'
 - '../util/provisioning/'
 - '../util/keys/'
-- '../../protocolImplementation/shared/bytestringJSON'
 - '../attestation'
 extra-deps: []

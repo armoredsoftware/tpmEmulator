@@ -5,5 +5,4 @@ packages:
 - '../'
 - '../util/provisioning/'
 - '../util/keys/'
-- '../../protocolImplementation/shared/bytestringJSON'
 extra-deps: []
