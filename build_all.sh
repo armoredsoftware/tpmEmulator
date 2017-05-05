@@ -7,9 +7,9 @@ fun() {
     cd /home/user/stackTopLevel/tpmEmulator
 }
 
-cd util/keys; fun "keys"
-fun "tpmEmulator"
-cd util/; fun "tpm-util"
-cd util/provisioning; fun "provisioning"
-cd attestation; fun "attestation"
+#cd util/keys; fun "keys"
+#fun "tpmEmulator"
+#cd util/; fun "tpm-util"
+#cd util/provisioning; fun "provisioning"
+#cd attestation; fun "attestation"
 cd appraisal; fun "appraisal"

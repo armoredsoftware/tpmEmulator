@@ -47,7 +47,7 @@ pcrProvision = do
 
 getCurrentComp :: IO TPM_PCR_COMPOSITE
 getCurrentComp = do
-  let list = [0..23] :: [Word8]
+  let list = [23] :: [Word8]
       pcrSelect = tpm_pcr_selection 24 list
   compGolden <- tpm_pcr_composite tpm pcrSelect
   return compGolden
