@@ -5,7 +5,7 @@ synopsis:            Haskell emulation of TPM (Trusted Platform Module) interfac
 license:             BSD3
 license-file:        LICENSE
 author:              Wesley Peck
-Maintainer:          Adam Petz (ampetz@ittc.ku.edu)
+maintainer:          ampetz@ittc.ku.edu
 -- copyright:
 category:            System
 build-type:          Simple
@@ -36,7 +36,7 @@ library
                        FlexibleInstances,
                        DeriveDataTypeable,
                        ExistentialQuantification
-  --extra-lib-dirs:      /home/armored/protocolImplementation/protocolImplementation/shared/bytestringJSON/
+  --extra-lib-dirs:
   
   build-depends:       base,
                        binary,
@@ -47,8 +47,6 @@ library
                        SHA,
                        RSA,
                        crypto-api,
-                       --aeson,
-                       --bytestring-json,
                        unordered-containers
 
 --  hs-source-dirs:     

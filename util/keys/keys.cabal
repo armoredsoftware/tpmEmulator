@@ -1,14 +1,14 @@
 name:                keys
 version:             0.1.0.0
--- synopsis:
--- description:
---homepage:            https://github.com/githubuser/helloworld#readme
+--synopsis:
+--description:
+--homepage:
 license:             BSD3
 license-file:        LICENSE
 author:              Adam Petz (ampetz@ittc.ku.edu)
 maintainer:          ampetz@ittc.ku.edu
 copyright:           2017 Adam Petz
---category:            Web
+--category:
 build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10	       		       

@@ -2,13 +2,13 @@ name:                appraiser-util
 version:             0.1.0.0
 -- synopsis:
 -- description:
---homepage:            https://github.com/githubuser/helloworld#readme
+--homepage:
 license:             BSD3
 license-file:        LICENSE
 author:              Adam Petz (ampetz@ittc.ku.edu)
 maintainer:          ampetz@ittc.ku.edu
 copyright:           2017 Adam Petz
---category:            Web
+--category:
 build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
@@ -35,7 +35,6 @@ executable AppMain
 
   hs-source-dirs:      ./
   other-modules:       AppraiserUtil
-  --exposed-modules:     AppraiserUtil
   build-depends:       base >= 4.7 && < 5,
                        binary,
                        bytestring,
@@ -52,14 +51,9 @@ executable AppMain
                        attester-util
 		       
   main-is:             AppMain.hs
-
-
-
-
-
-         		       
+      		       
   default-language:    Haskell2010
 
 --source-repository head
 --type:     git
---location: https://github.com/githubuser/helloworld
+--location: https://github.com/

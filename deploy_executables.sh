@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sw=.stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin
 te=/home/user/stackTopLevel/tpmEmulator
+sw=$te/appraisal/.stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin
 
 cp $sw/AppMain $te/appraisal/
 

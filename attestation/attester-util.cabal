@@ -2,58 +2,35 @@ name:                attester-util
 version:             0.1.0.0
 -- synopsis:
 -- description:
---homepage:            https://github.com/githubuser/helloworld#readme
+--homepage:
 license:             BSD3
 license-file:        LICENSE
 author:              Adam Petz (ampetz@ittc.ku.edu)
 maintainer:          ampetz@ittc.ku.edu
 copyright:           2017 Adam Petz
---category:            Web
+--category:
 build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
 
---executable AttesterUtil
 executable App2
-
---library
---hs-source-dirs:
-  --other-modules:     TPMUtil
-  build-depends:       base >= 4.7 && < 5
-
-                       --tpm-emulator
-		       
+  build-depends:       base >= 4.7 && < 5		       
   main-is:            App2.hs
 
 executable BAD_App2
-
---library
---hs-source-dirs:
-  --other-modules:     TPMUtil
-  build-depends:       base >= 4.7 && < 5
-
-                       --tpm-emulator
-		       
+  build-depends:       base >= 4.7 && < 5	       
   main-is:            BAD_App2.hs
 
 executable App1
-
---library
---hs-source-dirs:
-  --other-modules:     TPMUtil
   build-depends:       base >= 4.7 && < 5,
                        bytestring,
                        process,
 
                        tpm-util
-		       
+                       		       
   main-is:            App1.hs
 
 executable BAD_App1
-
---library
---hs-source-dirs:
-  --other-modules:     TPMUtil
   build-depends:       base >= 4.7 && < 5,
                        bytestring,
                        process,
@@ -79,10 +56,9 @@ library
                        tpm-util,
                        keys,
                        provisioning
-		       
---  main-is:            Main.hs	       		       
+       		       
   default-language:    Haskell2010
 
 --source-repository head
 --type:     git
---location: https://github.com/githubuser/helloworld
+--location: https://github.com/
