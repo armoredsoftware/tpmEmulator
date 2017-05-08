@@ -22,7 +22,7 @@ caEntity_Att {-dList-} nApp pcrSelect = do
   putStrLn "Main of entity Attester:"
   takeInit
   pcrReset
-  let fn = "/home/user/stackTopLevel/tpmEmulator/attestation/App1"
+  let fn = "/home/user/stackTopLevel/tpmEmulator/demo/attestation/App1"
   h <- myHash fn
   putStrLn $ "Hash of App1: \n" ++ (show (fromStrict h))
   val <- pcrExtendDemo (fromStrict h)

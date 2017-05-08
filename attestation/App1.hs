@@ -4,7 +4,7 @@ import System.Process (system)
 import TPMUtil (pcrExtendDemo, myHash, pcrReset)
 import Data.ByteString.Lazy hiding (putStrLn)
 
-fn = "/home/user/stackTopLevel/tpmEmulator/attestation/App2"
+fn = "/home/user/stackTopLevel/tpmEmulator/demo/attestation/App2"
 
 main = do
   putStrLn "App1 is running!"

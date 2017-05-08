@@ -4,18 +4,28 @@ import Provisioning
 import Data.Char
 import Codec.Crypto.RSA
 import System.Random
+import System.Environment (getArgs)
 
 main :: IO ()
 main = do
   putStrLn "START of provisioning main"
-  i <- getInput
-  putStrLn ""
-  case i of
-    1 -> ekProvision
-    2 -> pcrProvision
-    3 -> exportCAKeys
-    _ -> error "input ERROR"
-
+  args <- getArgs
+  case args of
+    [] -> do
+      i <- getInput
+      putStrLn ""
+      case i of
+        1 -> ekProvision
+        2 -> pcrProvision
+        3 -> exportCAKeys
+        _ -> error "input ERROR"
+    [x] -> do
+      pcrProvision
+      exportCAKeys
+    _ ->
+      putStrLn "Invalid arguments to ProvisioningMain."
+      
+      
   return ()
 
 getInput :: IO Int
