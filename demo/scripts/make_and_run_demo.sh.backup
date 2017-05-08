@@ -1,0 +1,5 @@
+#!/bin/bash
+
+(cd scripts; ./restart_tpm.sh; ./make_all.sh)
+
+./run_demo.sh

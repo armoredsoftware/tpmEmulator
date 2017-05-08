@@ -10,6 +10,7 @@ import Codec.Crypto.RSA as C hiding (sign, verify)
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import Crypto.Cipher.AES
 --import Crypto.Hash.SHA1 (hashlazy)
+import System.Environment (getEnv)
 
 tpm :: TPMSocket
 tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
@@ -112,7 +113,17 @@ myHash fp = do
   --return (bytestringDigest $ sha1 fb)
   
 --myHash = fmap bytestringDigest . sha1 . L.readFile
---myHash = fmap hashlazy . L.readFile 
+--myHash = fmap hashlazy . L.readFile
+
+prependDemoDir :: String -> IO String
+prependDemoDir suffix = do
+  prefix <- getEnv "DEMO_PATH"
+  let cleanPrefix = if ((Prelude.last prefix) == '/')
+                    then prefix
+                    else prefix ++ "/"
+                      
+  return (cleanPrefix ++ suffix)
+
 
 
 

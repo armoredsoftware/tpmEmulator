@@ -1,13 +1,12 @@
 module Main where
 
 import System.Process (system)
-import TPMUtil (pcrExtendDemo, myHash, pcrReset)
+import TPMUtil (pcrExtendDemo, myHash, pcrReset, prependDemoDir)
 import Data.ByteString.Lazy hiding (putStrLn)
-
-fn = "/home/user/stackTopLevel/tpmEmulator/attestation/App2"
 
 main = do
   putStrLn "BAD_App1 is running!"
+  fn <- prependDemoDir "attestation/App2"
   h <- myHash fn
   putStrLn $ "Hash of App2: \n" ++ (show (fromStrict h))
   val <- pcrExtendDemo (fromStrict h)

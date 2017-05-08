@@ -27,6 +27,7 @@ library
                        --cryptohash,
                        --cryptonite,
                        process,
+                       directory,
                        
                        tpm-emulator,
                        tpm-util,
@@ -46,6 +47,8 @@ executable ProvisioningMain
                        --cryptonite,
                        --cryptohash,
                        process,
+                       directory,
+                       provisioning,
 
                        tpm-emulator,
                        tpm-util,

@@ -5,6 +5,7 @@ import TPMUtil
 import Keys
 
 import System.IO
+import System.Directory (doesFileExist)
 import Data.Word
 import Data.Binary
 import Data.ByteString.Lazy (fromStrict)
@@ -15,11 +16,19 @@ goldenCompFileName= "goldenPcrComposite.txt"
 
 readGoldenComp :: IO TPM_PCR_COMPOSITE
 readGoldenComp = do
-  either <- decodeFileOrFail goldenCompFileName
-  case either of
-    Left (_, s) -> do putStrLn $ "Error reading/decoding from: " ++  goldenCompFileName ++ "\n" ++ s
-                      error "error reading/decoding file"
-    Right a -> return a
+  fn <- prependDemoDir $ "appraisal/" ++ goldenCompFileName
+  b <- doesFileExist fn
+  --putStrLn fn
+  case b of
+    False -> error $ "***PROVISIONING ERROR***: '" ++ goldenCompFileName ++ "' is missing.  Make sure to provision the TPM (i.e. run 'make provision')."
+    True -> do
+      either <- decodeFileOrFail goldenCompFileName
+      case either of
+        Left (_, s) -> do
+          putStrLn $ "Error reading/decoding from: " ++  goldenCompFileName ++
+            "\n" ++ s
+          error "error reading/decoding file"
+        Right a -> return a
 
 exportGoldenComp :: TPM_PCR_COMPOSITE -> IO ()
 exportGoldenComp comp = do

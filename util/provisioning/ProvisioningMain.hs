@@ -21,7 +21,7 @@ main = do
         _ -> error "input ERROR"
     [x] -> do
       pcrProvision
-      exportCAKeys
+      --exportCAKeys
     _ ->
       putStrLn "Invalid arguments to ProvisioningMain."
       

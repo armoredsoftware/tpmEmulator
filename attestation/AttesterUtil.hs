@@ -6,6 +6,7 @@ import Crypto.Cipher.AES
 import qualified Codec.Crypto.RSA as C
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import System.Process (system)
+import System.Environment (getEnv)
 
 
 import TPM
@@ -22,7 +23,7 @@ caEntity_Att {-dList-} nApp pcrSelect = do
   putStrLn "Main of entity Attester:"
   takeInit
   pcrReset
-  let fn = "/home/user/stackTopLevel/tpmEmulator/demo/attestation/App1"
+  fn <- prependDemoDir "attestation/App1"
   h <- myHash fn
   putStrLn $ "Hash of App1: \n" ++ (show (fromStrict h))
   val <- pcrExtendDemo (fromStrict h)

@@ -8,10 +8,10 @@ cp $sw/AppMain $te/appraisal/
 
 cp $sw/ProvisioningMain $te/provisioning/
 
-cp $sw/App1 $te/attestation/
-cp $sw/App1 $te/attestation/goodApp1
-cp $sw/App2 $te/attestation/
-cp $sw/App2 $te/attestation/goodApp2
+#cp $sw/App1 $te/attestation/
+#cp $sw/App1 $te/attestation/goodApp1
+#cp $sw/App2 $te/attestation/
+#cp $sw/App2 $te/attestation/goodApp2
 
-cp $sw/BAD_App1 $te/attestation/badApp1
-cp $sw/BAD_App2 $te/attestation/badApp2
+#cp $sw/BAD_App1 $te/attestation/badApp1
+#cp $sw/BAD_App2 $te/attestation/badApp2

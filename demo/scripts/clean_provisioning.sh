@@ -1,7 +1,7 @@
 #!/bin/bash
 
-te=/home/user/stackTopLevel/tpmEmulator/demo/appraisal
+te=$DEMO_PATH/appraisal
 
-rm $te/goldenPcrComposite.txt $te/caPrivateKey.txt $te/caPublicKey.txt 
+myrm $te/goldenPcrComposite.txt #$te/caPrivateKey.txt $te/caPublicKey.txt 
 
 #rm $te/ekpub.txt
