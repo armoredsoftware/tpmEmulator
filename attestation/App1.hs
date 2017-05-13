@@ -1,7 +1,7 @@
 module Main where
 
 import System.Process (system)
-import TPMUtil (pcrExtendDemo, myHash, pcrReset)
+import TPMUtil (pcrExtendDemo, myHash, pcrReset, prependDemoDir)
 import Data.ByteString.Lazy hiding (putStrLn)
 
 main = do
