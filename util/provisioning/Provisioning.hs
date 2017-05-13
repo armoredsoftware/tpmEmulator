@@ -45,7 +45,7 @@ pcrProvision :: IO ()
 pcrProvision = do
   {- TODO: do reset, golden hashing into PCRs here -}
   pcrReset
-  let fn = "/home/user/stackTopLevel/tpmEmulator/demo/attestation/App1"
+  fn <- prependDemoDir "attestation/App1"
   h <- myHash fn
   putStrLn $ "Hash of App1: \n" ++ (show (fromStrict h))
   val <- pcrExtendDemo (fromStrict h)
