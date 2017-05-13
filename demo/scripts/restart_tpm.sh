@@ -3,4 +3,11 @@
 ./kill_tpm.sh
 depmod -ae
 modprobe tpmd_dev
-tpmd clear
+
+if [ $# -eq 0 ]
+then
+    tpmd clear
+else
+    tpmd clear -f
+fi
+
