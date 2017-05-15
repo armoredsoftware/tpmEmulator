@@ -5,7 +5,7 @@ te=/home/user/stackTopLevel/tpmEmulator/
 fun() {
     #printf "\nBuilding $1...\n\n"
     #rm -rf .stack-work/ ;
-    stack build --allow-different-user
+    stack build --allow-different-user --ghc-options "fPIC"
 }
 
 #cd  $te/util/keys; fun "keys"
