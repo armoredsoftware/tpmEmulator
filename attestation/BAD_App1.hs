@@ -11,7 +11,7 @@ main = do
   putStrLn $ "Hash of App2: \n" ++ (show (fromStrict h))
   val <- pcrExtendDemo (fromStrict h)
   putStrLn "Extended into PCR.  New PCR value:"
-  putStrLn (show val)
-  putStrLn "Rogue BAD_App1 actions..."
+  putStrLn $ (show val) ++ "\n"
+  putStrLn $ "Rogue BAD_App1 actions..." ++ "\n"
   system fn
   return ()

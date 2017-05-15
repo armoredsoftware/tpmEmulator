@@ -48,7 +48,7 @@ evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
   goldenPcrComposite <- readGoldenComp
 
   let r4 = pcrComp == goldenPcrComposite
-  putStrLn ("PCR Composite: \n" ++ (show pcrComp) ++ "\n")
+  putStrLn ("Actual PCR Composite: \n" ++ (show pcrComp) ++ "\n")
   putStrLn ("Golden PCR Composite: \n" ++ (show goldenPcrComposite) ++ "\n")
 
   sequence $ [{-logf, -}putStrLn] <*> (pure ("CACert Signature: " ++ (show r1)))
