@@ -1,6 +1,6 @@
 #!/bin/bash
 
-te=/home/user/stackTopLevel/tpmEmulator/
+te=$DEMO_PATH/../
 
 fun() {
     #printf "\nBuilding $1...\n\n"

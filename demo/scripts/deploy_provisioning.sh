@@ -1,6 +1,6 @@
 #!/bin/bash
 
-te=/home/user/stackTopLevel/tpmEmulator/demo
+te=$DEMO_PATH
 pr=$te/provisioning
 
 cd $pr; ./ProvisioningMain a
