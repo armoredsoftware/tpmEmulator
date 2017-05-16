@@ -1,12 +1,13 @@
 #!/bin/bash
 
 te=$DEMO_PATH
+ted=$DEPLOY_PATH
 teb=$te/../
 sw=$teb/appraisal/.stack-work/install/x86_64-linux/lts-6.31/7.10.3/bin
 
-cp $sw/AppMain $te/appraisal/
+echo $te/appraisal/ $ted/appraisal/ | xargs -n 1 cp $sw/AppMain 
 
-cp $sw/ProvisioningMain $te/provisioning/
+echo $te/provisioning/ $ted/provisioning/ | xargs -n 1 cp $sw/ProvisioningMain 
 
 #cp $sw/App1 $te/attestation/
 #cp $sw/App1 $te/attestation/goodApp1
