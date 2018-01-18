@@ -15,7 +15,7 @@ import qualified Prelude as P
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 tpm_session_oiap :: TPM tpm => tpm -> IO Session
-tpm_session_oiap tpm = do 
+tpm_session_oiap tpm = do
     (rtag,size,resl,dat) <- tpm_transmit tpm 24 tag cod empty
     let (handle,dat') = splitAt 4 dat
     return $ OIAP handle (decode dat')
@@ -24,13 +24,13 @@ tpm_session_oiap tpm = do
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
-tpm_session_osap :: TPM tpm => 
-                    tpm -> 
+tpm_session_osap :: TPM tpm =>
+                    tpm ->
                     TPM_DIGEST ->
                     Word16 ->
                     Word32 ->
                     IO Session
-tpm_session_osap tpm key etype eval = do 
+tpm_session_osap tpm key etype eval = do
     oosap <- nonce_create
     let dat = concat [encode etype, encode eval, encode oosap]
     (rtag,size,resl,dat) <- tpm_transmit tpm 44 tag cod dat
@@ -57,4 +57,3 @@ tpm_session_close tpm session = do
 -------------------------------------------------------------------------------
 tpm_session_auth Nothing = TPM_DIGEST $ replicate 20 0
 tpm_session_auth (Just h) = h
-

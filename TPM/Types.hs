@@ -82,6 +82,7 @@ type TPM_HANDLE = UINT32
 type TPM_FAMILY_OPERATION = UINT32
 
 
+-- Section 12.8
 data TPM_ASYM_CA_CONTENTS = TPM_ASYM_CA_CONTENTS {
   sessKey :: TPM_SYMMETRIC_KEY,
   idDigest :: TPM_DIGEST
@@ -97,7 +98,7 @@ instance Binary TPM_ASYM_CA_CONTENTS where
     dig <- get
     return $ TPM_ASYM_CA_CONTENTS sym dig
 
-
+-- Section 12.5
 data TPM_IDENTITY_CONTENTS = TPM_IDENTITY_CONTENTS {
   labelPrivCADigest :: TPM_CHOSENID_HASH,
   identityPubKey :: TPM_PUBKEY
@@ -115,6 +116,7 @@ instance Binary TPM_IDENTITY_CONTENTS where
     label <- get
     pubkey <- get
     return $ TPM_IDENTITY_CONTENTS label pubkey
+
 -------------------------------------------------------------------------------
 -- TPM helper aliases as defined throughout the document:
 --  TPM Main: Part 2 - TPM Structures
@@ -1407,7 +1409,7 @@ instance FromJSON TPM_SYMMETRIC_KEY_PARMS where
   				 <*> o .: "TPM_PCR_SELECTION"
   				 <*> o .: "TPM_NONCE" -}
 instance ToJSON TPM_STORE_PUBKEY where
-	toJSON (TPM_STORE_PUBKEY bs) = object [ "TPM_STORE_PUBKEY" .= encodeToText (toStrict bs) ] 
+	toJSON (TPM_STORE_PUBKEY bs) = object [ "TPM_STORE_PUBKEY" .= encodeToText (toStrict bs) ]
 
 instance FromJSON TPM_STORE_PUBKEY where
 	parseJSON (DA.Object o) = TPM_STORE_PUBKEY <$> ((o .: "TPM_STORE_PUBKEY") >>= decodeFromTextL)

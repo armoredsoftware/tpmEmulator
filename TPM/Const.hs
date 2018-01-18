@@ -8,6 +8,7 @@ import Data.Bits
 -------------------------------------------------------------------------------
 -- TPM command and response tags as defined by section 6 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_TAG
 -------------------------------------------------------------------------------
 tpm_tag_rqu_command = (0x00c1 :: Word16)
 tpm_tag_rqu_auth1_command = (0x00c2 :: Word16)
@@ -18,11 +19,19 @@ tpm_tag_rsp_auth2_command = (0x00c6 :: Word16)
 
 -------------------------------------------------------------------------------
 -- TPM capability flags
+-- Type: TPM_CAPABILITY_AREA
+-- TPM Func: TPM_GetCapability
 -------------------------------------------------------------------------------
 tpm_cap_ord = (0x00000001 :: Word32)
 tpm_cap_alg = (0x00000002 :: Word32)
 tpm_cap_pid = (0x00000003 :: Word32)
 tpm_cap_flag = (0x00000004 :: Word32)
+-------------------------------------------------------------------------------
+-- TPM sub capability flags for tpm_cap_flag
+tpm_cap_flag_permanent = (0x00000108 :: Word32)
+tpm_cap_flag_volatile = (0x00000109 :: Word32)
+-------------------------------------------------------------------------------
+
 tpm_cap_property = (0x00000005 :: Word32)
 tpm_cap_version = (0x00000006 :: Word32)
 tpm_cap_key_handle = (0x00000007 :: Word32)
@@ -39,6 +48,12 @@ tpm_cap_auth_encrypt = (0x00000017 :: Word32)
 tpm_cap_select_size = (0x00000018 :: Word32)
 tpm_cap_da_logic = (0x00000019 :: Word32)
 tpm_cap_version_val = (0x0000001a :: Word32)
+
+-------------------------------------------------------------------------------
+-- TPM capability flags
+-- Type: TPM_CAPABILITY_AREA
+-- TPM Func: TPM_SetCapability
+-------------------------------------------------------------------------------
 tpm_set_perm_flags = (0x00000001 :: Word32)
 tpm_set_perm_data = (0x00000002 :: Word32)
 tpm_set_stclear_flags = (0x00000003 :: Word32)
@@ -48,7 +63,9 @@ tpm_set_stany_data = (0x00000006 :: Word32)
 tpm_set_vendor = (0x00000007 :: Word32)
 
 -------------------------------------------------------------------------------
--- TPM sub capability flags
+-- TPM sub capability flags (is this the best description??)
+-- Type: TPM_PERMANENT_FLAGS
+-- TPM Func: TPM_SetCapability
 -------------------------------------------------------------------------------
 tpm_pf_readsrkpub = (17 :: Word32)
 tpm_pf_disablefulldalogicinfo = (20 :: Word32)
@@ -59,6 +76,7 @@ tpm_pd_daaproof = (25 :: Word32)
 -------------------------------------------------------------------------------
 -- TPM localities as defined by section 8.6 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_LOCALITY_SELECTION
 -------------------------------------------------------------------------------
 tpm_loc_four = (0x10 :: Word8)
 tpm_loc_three = (0x08 :: Word8)
@@ -67,19 +85,16 @@ tpm_loc_one = (0x02 :: Word8)
 tpm_loc_zero = (0x01 :: Word8)
 
 -------------------------------------------------------------------------------
--- TPM key control values as defined by section 8.6 of the document:
+-- TPM key control values as defined by section 10.9 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_KEY_CONTROL
 -------------------------------------------------------------------------------
 tpm_key_control_owner_evict = (0x00000001 :: Word32)
 
 -------------------------------------------------------------------------------
--- TPM sub capability flags for tpm_cap_flag
--------------------------------------------------------------------------------
-tpm_cap_flag_permanent = (0x00000108 :: Word32)
-tpm_cap_flag_volatile = (0x00000109 :: Word32)
-
--------------------------------------------------------------------------------
 -- TPM sub capability flags for tpm_cap_property
+-- Type: TPM_CAP_PROPERTY
+-- TPM Func: TPM_GetCapability
 -------------------------------------------------------------------------------
 tpm_cap_prop_pcr = (0x00000101 :: Word32)
 tpm_cap_prop_dir = (0x00000102 :: Word32)
@@ -115,6 +130,7 @@ tpm_cap_prop_input_buffer = (0x00000124 :: Word32)
 -------------------------------------------------------------------------------
 -- TPM key usage values as defined by section 5.8 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_KEY_USAGE
 -------------------------------------------------------------------------------
 tpm_key_signing = (0x0010 :: Word16)
 tpm_key_storage = (0x0011 :: Word16)
@@ -123,6 +139,7 @@ tpm_key_authchange = (0x0013 :: Word16)
 tpm_key_bind = (0x0014 :: Word16)
 tpm_key_legacy = (0x0015 :: Word16)
 tpm_key_migrate = (0x0016 :: Word16)
+-- Why??
 tpm_key_names = [ (tpm_key_signing, "Signing")
                 , (tpm_key_storage, "Storage")
                 , (tpm_key_storage, "Identification")
@@ -131,13 +148,14 @@ tpm_key_names = [ (tpm_key_signing, "Signing")
                 , (tpm_key_storage, "Legacy Usage")
                 , (tpm_key_storage, "Migration")
                 , (tpm_key_identity, "Identity") ]
-tpm_key_getname k = case lookup k tpm_key_names of 
+tpm_key_getname k = case lookup k tpm_key_names of
                         Nothing -> "Unknown Key Usage"
                         Just x  -> x
 
 -------------------------------------------------------------------------------
 -- TPM encryption schemes as defined by section 5.8.1 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_ENC_SCHEME
 -------------------------------------------------------------------------------
 tpm_es_none = (0x0001 :: Word16)
 tpm_es_rsaespkcsv15 = (0x0002 :: Word16)
@@ -156,6 +174,7 @@ tpm_es_getname es = case lookup es tpm_es_names of
 -------------------------------------------------------------------------------
 -- TPM signature schemes as defined by section 5.8.1 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_SIG_SCHEME
 -------------------------------------------------------------------------------
 tpm_ss_none = (0x0001 :: Word16)
 tpm_ss_rsassapkcs1v15_sha1 = (0x0002 :: Word16)
@@ -164,7 +183,7 @@ tpm_ss_rsassapkcs1v15_info = (0x0004 :: Word16)
 tpm_ss_names = [ (tpm_ss_none, "none")
                , (tpm_ss_rsassapkcs1v15_sha1, "RSA SHA-1")
                , (tpm_ss_rsassapkcs1v15_der, "RSA DER")
-               , (tpm_ss_rsassapkcs1v15_info, "RSA INFO") ] 
+               , (tpm_ss_rsassapkcs1v15_info, "RSA INFO") ]
 tpm_ss_getname ss = case lookup ss tpm_ss_names of
                         Nothing -> "Unknown Signature Scheme"
                         Just x  -> x
@@ -172,6 +191,7 @@ tpm_ss_getname ss = case lookup ss tpm_ss_names of
 -------------------------------------------------------------------------------
 -- TPM authentication values as defined by section 5.9 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_AUH_DATA_USAGE
 -------------------------------------------------------------------------------
 tpm_auth_never = (0x00 :: Word8)
 tpm_auth_always = (0x01 :: Word8)
@@ -186,6 +206,7 @@ tpm_auth_getname auth = case lookup auth tpm_auth_names of
 -------------------------------------------------------------------------------
 -- TPM key flags as defined by section 5.10 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_KEY_FLAGS
 -------------------------------------------------------------------------------
 tpm_kf_redirection = (0x00000001 :: Word32)
 tpm_kf_migratable = (0x00000002 :: Word32)
@@ -209,6 +230,7 @@ tpm_kf_getname kf = unwords $ filter (/= "") [ lu tpm_kf_redirection
 -------------------------------------------------------------------------------
 -- TPM CMK delegate values as defined by section 5.17 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: iTPM_CMK_DELEGATE
 -------------------------------------------------------------------------------
 tpm_cmk_delegate_signing = (0x80000000 :: Word32)
 tpm_cmk_delegate_storage = (0x40000000 :: Word32)
@@ -219,6 +241,7 @@ tpm_cmk_delegate_migrate = (0x08000000 :: Word32)
 -------------------------------------------------------------------------------
 -- TPM structure tags as defined by section 3.1 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type:
 -------------------------------------------------------------------------------
 tpm_tag_contextblob = (0x0001 :: Word16)
 tpm_tag_context_sensitive = (0x0002 :: Word16)
@@ -254,6 +277,29 @@ tpm_tag_permanent_flags = (0x001f :: Word16)
 tpm_tag_stclear_flags = (0x0020 :: Word16)
 tpm_tag_stany_flags = (0x0021 :: Word16)
 tpm_tag_permanent_data = (0x0022 :: Word16)
+tpm_tag_stclear_data = (0x0023 :: Word16)
+tpm_tag_stany_data = (0x0024 :: Word16)
+tpm_tag_family_table_entry = (0x0025 :: Word16)
+tpm_tag_delegate_sensitive = (0x0026 :: Word16)
+tpm_tag_delg_key_blob = (0x0027 :: Word16)
+tpm_tag_key12 = (0x0028 :: Word16)
+tpm_tag_certify_info2 = (0x0029 :: Word16)
+tpm_tag_delegate_owner_blob = (0x002A :: Word16)
+tpm_tag_ek_blob_activate = (0x002B :: Word16)
+tpm_tag_daa_blob = (0x002C :: Word16)
+tpm_tag_daa_context = (0x002D :: Word16)
+tpm_tag_daa_enforce = (0x002E :: Word16)
+tpm_tag_daa_issuer = (0x002F :: Word16)
+tpm_tag_cap_version_info = (0x0030 :: Word16)
+tpm_tag_daa_sensitive = (0x0031 :: Word16)
+tpm_tag_daa_tpm = (0x0032 :: Word16)
+tpm_tag_cmk_migauth = (0x0033 :: Word16)
+tpm_tag_cmk_sigticket = (0x0034 :: Word16)
+tpm_tag_cmk_ma_approval = (0x0035 :: Word16)
+tpm_tag_quote_info2 = (0x0036 :: Word16)
+tpm_tag_da_info = (0x0037 :: Word16)
+tpm_tag_da_info_limited = (0x0038 :: Word16)
+tpm_tag_da_action_type = (0x0039 :: Word16)
 
 -------------------------------------------------------------------------------
 -- TPM well known key handles as defined by section 4.4.1 of the document:
@@ -270,6 +316,7 @@ tpm_kh_ek = (0x40000006 :: Word32)
 -------------------------------------------------------------------------------
 -- TPM resource types as defined by section 4.1 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_RESOURCE_TYPE
 -------------------------------------------------------------------------------
 tpm_rt_key = (0x00000001 :: Word32)
 tpm_rt_auth = (0x00000002 :: Word32)
@@ -285,6 +332,7 @@ tpm_rt_daa_v1 = (0x0000000a :: Word32)
 -------------------------------------------------------------------------------
 -- TPM payload types as defined by section 4.2 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_PAYLOAD_TYPE
 -------------------------------------------------------------------------------
 tpm_pt_asym = (0x01 :: Word8)
 tpm_pt_bind = (0x02 :: Word8)
@@ -298,6 +346,7 @@ tpm_pt_cmk_migrate = (0x08 :: Word8)
 -------------------------------------------------------------------------------
 -- TPM startup types as defined by section 4.5 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_STARTUP_TYPE
 -------------------------------------------------------------------------------
 tpm_st_clear = (0x0001 :: Word16)
 tpm_st_state = (0x0002 :: Word16)
@@ -306,6 +355,7 @@ tpm_st_deactivated = (0x0003 :: Word16)
 -------------------------------------------------------------------------------
 -- TPM protocol identifiers as defined by section 4.7 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_PROTOCOL_ID
 -------------------------------------------------------------------------------
 tpm_pid_oiap = (0x0001 :: Word16)
 tpm_pid_osap = (0x0002 :: Word16)
@@ -318,6 +368,7 @@ tpm_pid_transport = (0x0007 :: Word16)
 -------------------------------------------------------------------------------
 -- TPM algorithm identifiers as defined by section 4.8 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_ALGORITHM_ID
 -------------------------------------------------------------------------------
 tpm_alg_rsa = (0x00000001 :: Word32)
 tpm_alg_sha = (0x00000004 :: Word32)
@@ -385,13 +436,15 @@ tpm_delegate_daa_sign = (0x00000001 :: Word32)
 -------------------------------------------------------------------------------
 -- TPM family flags as defiend by section 20.3 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_FAMILY_FLAG
 -------------------------------------------------------------------------------
-tpm_delegate_admin_lock = (0x00000002 :: Word32) 
+tpm_delegate_admin_lock = (0x00000002 :: Word32)
 tpm_famflag_enabled = (0x00000001 :: Word32)
 
 -------------------------------------------------------------------------------
 -- TPM migration schemes as defiend by section 4.10 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_MIGRATE_SCHEME
 -------------------------------------------------------------------------------
 tpm_ms_migrate = (0x0001 :: Word16)
 tpm_ms_rewrap = (0x0002 :: Word16)
@@ -402,6 +455,7 @@ tpm_ms_restrict_approve = (0x0005 :: Word16)
 -------------------------------------------------------------------------------
 -- TPM ek types as defined by section 4.11 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_EK_TYPE
 -------------------------------------------------------------------------------
 tpm_ek_type_activate = (0x0001 :: Word16)
 tpm_ek_type_auth = (0x0002 :: Word16)
@@ -409,6 +463,7 @@ tpm_ek_type_auth = (0x0002 :: Word16)
 -------------------------------------------------------------------------------
 -- TPM physical presence values as defined by section 4.9 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_PHYSICAL_PRESENCE
 -------------------------------------------------------------------------------
 tpm_physical_presence_hw_disable = (0x0200 :: Word16)
 tpm_physical_presence_cmd_disable = (0x0100 :: Word16)
@@ -422,6 +477,7 @@ tpm_physical_presence_lock = (0x0004 :: Word16)
 -------------------------------------------------------------------------------
 -- TPM entity types as defined by section 4.3 of the document:
 --  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_ENTITY_TYPE
 -------------------------------------------------------------------------------
 tpm_et_xor_keyhandle = (0x0001 :: Word16)
 tpm_et_xor_owner = (0x0002 :: Word16) -- key handle: 0x40000001
@@ -436,6 +492,7 @@ tpm_et_xor_counter = (0x000a :: Word16)
 tpm_et_xor_nv = (0x000B :: Word16)
 tpm_et_xor_operator = (0x000c :: Word16)
 tpm_et_xor_reserved_handle = (0x0040 :: Word16)
+
 tpm_et_aes_keyhandle = (0x0601 :: Word16)
 tpm_et_aes_owner = (0x0602 :: Word16) -- key handle: 0x40000001
 tpm_et_aes_data = (0x0603 :: Word16)
@@ -451,7 +508,8 @@ tpm_et_aes_operator = (0x060c :: Word16)
 tpm_et_aes_reserved_handle = (0x0640 :: Word16)
 
 -------------------------------------------------------------------------------
--- TPM error codes
+-- TPM fatal error codes as defined by section 16 of the document:
+--  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
 tpm_base = (0x0 :: Word32)
 tpm_success = (tpm_base :: Word32)
@@ -529,7 +587,7 @@ tpm_not_fullwrite = tpm_base + 70
 tpm_context_gap = tpm_base + 71
 tpm_maxnvwrites = tpm_base + 72
 tpm_nooperator = tpm_base + 73
-tpm_resourcemissing = tpm_base +74 
+tpm_resourcemissing = tpm_base +74
 tpm_delegate_lock = tpm_base + 75
 tpm_delegate_family = tpm_base + 76
 tpm_delegate_admin = tpm_base + 77
@@ -554,13 +612,20 @@ tpm_ma_authority = tpm_base + 95
 tpm_permanentek = tpm_base + 97
 tpm_bad_signature = tpm_base + 98
 tpm_nocontextspace = tpm_base + 99
+
+-------------------------------------------------------------------------------
+-- TPM non-fatal error codes as defined by section 16 of the document:
+--  TPM Main: Part 2 - TPM Structures
+-------------------------------------------------------------------------------
 tpm_retry = tpm_base + tpm_non_fatal
 tpm_needs_selftest = tpm_base + tpm_non_fatal + 1
 tpm_doing_selftest = tpm_base + tpm_non_fatal + 2
 tpm_defend_lock_running = tpm_base + tpm_non_fatal + 3
 
 -------------------------------------------------------------------------------
--- TPM command codes
+-- TPM command codes as defined by section 17 of the document:
+--  TPM Main: Part 2 - TPM Structures
+-- Type: TPM_COMMAND_CODE
 -------------------------------------------------------------------------------
 tpm_ord_activateidentity = (0x0000007a :: Word32)
 tpm_ord_authorizemigrationkey = (0x0000002b :: Word32)

@@ -27,7 +27,7 @@ tpm_pcr_selection tot pcrs = TPM_PCR_SELECTION bs
           dat = P.map encode pcrs
           bs  = P.foldl set (replicate (fromIntegral tot') 0) pcrs
           tot' = tot `div` 8
-          set c l = let (bi,bt) = divMod l 8 
+          set c l = let (bi,bt) = divMod l 8
                         bi' = (fromIntegral bi)
                         bv = index c bi'
                     in replace c bi' (setBit bv (fromIntegral bt))

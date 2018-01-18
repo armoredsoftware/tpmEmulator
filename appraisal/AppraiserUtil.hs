@@ -30,7 +30,7 @@ evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
   --debugPrint "Inside Evaluate" --sequence $ [logf, putStrLn] <*> (pure ( "Inside Evaluate..."))
   caPublicKey <- getCAPublicKey
 
-  
+
   let blobEvidence :: ByteString
       {-blobEvidence = packImpl [AEvidence ev, ANonce nonceResp,
                                ASignedData $ SignedData ( ATPM_PUBKEY (dat cert)) (sig cert)] --pubKey -}
@@ -38,7 +38,7 @@ evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
       evBlobSha1 =  bytestringDigest $ sha1 blobEvidence
 
       quoteInfo :: TPM_QUOTE_INFO
-      quoteInfo = TPM_QUOTE_INFO (tpm_pcr_composite_hash $ pcrComp)                                                        (TPM_NONCE evBlobSha1)
+      quoteInfo = TPM_QUOTE_INFO (tpm_pcr_composite_hash $ pcrComp) (TPM_NONCE evBlobSha1)
 
       aikPublicKey = tpm_get_rsa_PublicKey aikPub
 

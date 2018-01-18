@@ -13,7 +13,7 @@ import Crypto.Cipher.AES
 import System.Environment (getEnv)
 
 tpm :: TPMSocket
-tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
+tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0"
 
 ownerPass :: String
 ownerPass = "adam"
@@ -69,7 +69,6 @@ makeAndLoadAIK = do
        sPass = tpm_digest_pass srkPass
        iPass = tpm_digest_pass aikPass
 
-
 attGetPubKey :: TPM_KEY_HANDLE -> TPM_DIGEST -> IO TPM_PUBKEY
 attGetPubKey handle pass = do
   shn <- tpm_session_oiap tpm
@@ -109,9 +108,9 @@ myHash fp = do
   fb <- L.readFile fp
   let bs = bytestringDigest $ sha1 fb
   return (L.toStrict bs)
-  
+
   --return (bytestringDigest $ sha1 fb)
-  
+
 --myHash = fmap bytestringDigest . sha1 . L.readFile
 --myHash = fmap hashlazy . L.readFile
 
@@ -121,17 +120,8 @@ prependDemoDir suffix = do
   let cleanPrefix = if ((Prelude.last prefix) == '/')
                     then prefix
                     else prefix ++ "/"
-                      
+
   return (cleanPrefix ++ suffix)
-
-
-
-
-
-
-
-
-
 
 {- Attester / Appraiser shared utils TODO:  Move these to separate library? -}
 type Nonce = Int
@@ -154,14 +144,11 @@ instance (Binary a) => Binary (SignedData a) where
   get = do a <- get
            b <- get
            return $ SignedData a b
-           
+
 type AikContents = SignedData TPM_IDENTITY_CONTENTS
-
-
 
 a :: Nonce
 a = 3
-
 
 generateNonce :: IO Nonce
 generateNonce = do
@@ -172,7 +159,6 @@ checkNonce expected actual = do
   case (expected == actual) of
     True -> return ()
     False -> putStrLn "Nonce check failed"
-
 
 --Symmetric Key decryption
 realDecrypt :: (Binary a) => SymmKey -> CipherText -> a
