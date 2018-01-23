@@ -28,18 +28,12 @@ type UINT32 = Word32
 type UINT64 = Word64
 
 -------------------------------------------------------------------------------
--- Helper definitions which are not directly defined in the TPM
--- specification but which are informative none the less.
--------------------------------------------------------------------------------
-type NIBBLE = Word8 -- Should be Word4 but this type does not exist
-
--------------------------------------------------------------------------------
--- TPM helper definitions as defined by section 2.2.3 of the document:
+-- TPM helper redefinitions as defined by section 2.2.3 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
 type TPM_AUTH_DATA_USAGE = BYTE
 type TPM_PAYLOAD_TYPE = BYTE
--- type TPM_VERSION_BYTE = BYTE
+type TPM_VERSION_BYTE = BYTE
 type TPM_DA_STATE = BYTE
 type TPM_TAG = UINT16
 type TPM_PROTOCOL_ID = UINT16
@@ -70,7 +64,7 @@ type TPM_KEY_CONTROL = UINT32
 type TPM_NV_INDEX = UINT32
 type TPM_FAMILY_ID = UINT32
 type TPM_FAMILY_VERIFICATION = UINT32
--- type TPM_STARTUP_EFFECTS = UINT32
+type TPM_STARTUP_EFFECTS = UINT32
 type TPM_SYM_MODE = UINT32
 type TPM_FAMILY_FLAGS = UINT32
 type TPM_DELEGATE_INDEX = UINT32
