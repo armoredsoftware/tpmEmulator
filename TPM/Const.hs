@@ -242,7 +242,7 @@ tpm_ek_type_auth = (0x0002 :: Word16)
 -- Type: TPM_CAPABILITY_AREA
 -- TPM Func: TPM_GetCapability
 -------------------------------------------------------------------------------
-tpm_cap_ord = (0x0\0000001 :: Word32)
+tpm_cap_ord = (0x00000001 :: Word32)
 tpm_cap_alg = (0x00000002 :: Word32)
 tpm_cap_pid = (0x00000003 :: Word32)
 tpm_cap_flag = (0x00000004 :: Word32)
