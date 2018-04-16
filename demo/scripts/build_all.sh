@@ -1,6 +1,6 @@
 #!/bin/bash
 
-te=$DEMO_PATH"/../"
+te=$DEMO_PATH
 
 fun() {
     #printf "\nBuilding $1...\n\n"
@@ -15,4 +15,4 @@ fun() {
 #cd attestation; fun "attestation"
 
 #cd /home/adam/tpmEmulator/appraisal; fun "appraisal"
-cd $te"appraisal"; fun "appraisal"
+cd $te"/../appraisal"; fun "appraisal"
