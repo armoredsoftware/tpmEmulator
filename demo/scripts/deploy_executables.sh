@@ -3,7 +3,7 @@
 te=$DEMO_PATH
 #ted=$DEPLOY_PATH
 #teb=$te"/../"
-sw=$te"/../appraisal/.stack-work/install/i386-linux/lts-6.31/7.10.3/bin"
+sw=$SW_PATH #$te"/../appraisal/.stack-work/install/i386-linux/lts-6.31/7.10.3/bin"
 
 #echo $te/appraisal/ $ted/appraisal/ | xargs -n 1 cp $sw/AppMain
 echo $te"/appraisal/"  | xargs -n 1 cp $sw"/AppMain"
