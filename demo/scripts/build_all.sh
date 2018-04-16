@@ -17,4 +17,4 @@ fun() {
 #cd /home/adam/tpmEmulator/appraisal; fun "appraisal"
 cd $te"/../appraisal"; fun "appraisal"
 
-cd $te"/../attestation"; fun "attestation"
+#cd $te"/../attestation"; fun "attestation"
