@@ -21,7 +21,7 @@ caEntity_Att :: {-EvidenceDescriptor -> -} Nonce -> TPM_PCR_SELECTION ->
 caEntity_Att {-dList-} nApp pcrSelect = do
 
   putStrLn "Main of entity Attester:"
-  takeInit
+  {-takeInit
   pcrReset
   fn <- prependDemoDir "attestation/App1"
   h <- myHash fn
@@ -30,6 +30,7 @@ caEntity_Att {-dList-} nApp pcrSelect = do
   putStrLn "Extended into PCR.  New PCR value:"
   putStrLn $ (show val) ++ "\n"
   system fn
+  -}
 
   --putStrLn "before tpmMK_Idddddd"
   (iKeyHandle, aikContents) <- tpmMk_Id
