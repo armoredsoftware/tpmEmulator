@@ -54,6 +54,19 @@ pcrProvision = do
   system fn
   exportCurrentComp
 
+measure :: IO ()
+measure = do
+  {- TODO: do reset, golden hashing into PCRs here -}
+  pcrReset
+  fn <- prependDemoDir "attestation/App1"
+  h <- myHash fn
+  putStrLn $ "Hash of App1: \n" ++ (show (fromStrict h))
+  val <- pcrExtendDemo (fromStrict h)
+  putStrLn "Extended into PCR.  New PCR value:"
+  putStrLn $ (show val) ++ "\n"
+  --system fn
+  --exportCurrentComp
+
 getCurrentComp :: IO TPM_PCR_COMPOSITE
 getCurrentComp = do
   let list = [23] :: [Word8]

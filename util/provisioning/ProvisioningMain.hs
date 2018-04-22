@@ -22,6 +22,10 @@ main = do
     [x] -> do
       pcrProvision
       --exportCAKeys
+    [x,y] -> do
+      measure
+      --pcrProvision
+      --exportCAKeys
     _ ->
       putStrLn "Invalid arguments to ProvisioningMain."
       

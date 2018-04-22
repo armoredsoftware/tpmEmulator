@@ -6,6 +6,9 @@ build:
 provision: provisioning/ProvisioningMain
 	(cd scripts; ./deploy_provisioning.sh)
 
+measure: provisioning/ProvisioningMain
+	(cd scripts; ./measure.sh)
+
 provisioning/ProvisioningMain: build
 
 clean:
