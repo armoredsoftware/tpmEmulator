@@ -44,6 +44,7 @@ exportCurrentComp = do
 pcrProvision :: IO ()
 pcrProvision = do
   {- TODO: do reset, golden hashing into PCRs here -}
+  takeInit
   pcrReset
   fn <- prependDemoDir "attestation/App1"
   h <- myHash fn
