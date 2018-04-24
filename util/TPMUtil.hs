@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric#-}
 module TPMUtil where
 
 import TPM
@@ -11,6 +12,7 @@ import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import Crypto.Cipher.AES
 --import Crypto.Hash.SHA1 (hashlazy)
 import System.Environment (getEnv)
+import GHC.Generics
 
 tpm :: TPMSocket
 tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
@@ -143,7 +145,7 @@ type Signature = L.ByteString;
 data SignedData a = SignedData {
   dat :: a,
   sig :: Signature
-} deriving (Eq, Read, Show)
+} deriving (Eq, Read, Show, Generic)
 
 instance (Binary a) => Binary (SignedData a) where
   put (SignedData a b) =

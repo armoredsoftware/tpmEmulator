@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, UndecidableInstances, RecordWildCards, OverloadedStrings#-}
+{-# LANGUAGE FlexibleContexts, UndecidableInstances, RecordWildCards, OverloadedStrings, DeriveGeneric#-}
 
 module TPM.Types where
 import TPM.Utils
@@ -16,6 +16,7 @@ import Control.Monad
 import Control.Exception
 import Prelude hiding (take,length)
 import qualified Prelude as P
+import GHC.Generics
 
 -------------------------------------------------------------------------------
 -- Basic data types as defined by section 2.2.1 of the document:
@@ -268,7 +269,7 @@ instance Binary TPM_VERSION where
 -- TPM digest as defined by section 5.4 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-newtype TPM_DIGEST = TPM_DIGEST ByteString deriving (Eq, Read, Show)
+newtype TPM_DIGEST = TPM_DIGEST ByteString deriving (Eq, Read, Show, Generic)
 
 {-
 instance Show TPM_DIGEST where
@@ -670,7 +671,7 @@ data TPM_STANY_DATA = TPM_STANY_DATA {
 -- TPM pcr selection structure as defined by section 8.1 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-newtype TPM_PCR_SELECTION = TPM_PCR_SELECTION ByteString deriving (Eq, Read, Show)
+newtype TPM_PCR_SELECTION = TPM_PCR_SELECTION ByteString deriving (Eq, Read, Show, Generic)
 
 
 {-instance Show TPM_PCR_SELECTION where
@@ -693,7 +694,7 @@ instance Binary TPM_PCR_SELECTION where
 data TPM_PCR_COMPOSITE = TPM_PCR_COMPOSITE {
       tpmPcrCompositeSelection :: TPM_PCR_SELECTION
     , tpmPcrCompositePcrs      :: [TPM_PCRVALUE]
-    } deriving (Show,Eq, Read)
+    } deriving (Show,Eq, Read, Generic)
 
 instance Binary TPM_PCR_COMPOSITE where
     put (TPM_PCR_COMPOSITE s pcrs) = do
@@ -906,14 +907,14 @@ data TPM_BOUND_DATA = TPM_BOUND_DATA {
 data TPM_KEY_PARMS_DATA = RSA_DATA TPM_RSA_KEY_PARMS
                         | AES_DATA TPM_SYMMETRIC_KEY_PARMS
                         | NO_DATA
-                        deriving (Eq, Read, Show)
+                        deriving (Eq, Read, Show, Generic)
 
 data TPM_KEY_PARMS = TPM_KEY_PARMS {
       tpmKeyParamAlg  :: TPM_ALGORITHM_ID
     , tpmKeyParamEnc  :: TPM_ENC_SCHEME
     , tpmKeyParamSig  :: TPM_SIG_SCHEME
     , tpmKeyParamData :: TPM_KEY_PARMS_DATA
-    } deriving (Eq, Read, Show)
+    } deriving (Eq, Read, Show, Generic)
 
 {-
 instance Show TPM_KEY_PARMS_DATA where
@@ -975,7 +976,7 @@ data TPM_RSA_KEY_PARMS = TPM_RSA_KEY_PARMS {
       tpmRsaKeyLength  :: UINT32
     , tpmRsaKeyPrimes  :: UINT32
     , tpmRsaKeyExp     :: ByteString
-    } deriving (Show,Eq, Read)
+    } deriving (Show,Eq, Read, Generic)
 
 instance Binary TPM_RSA_KEY_PARMS where
     put (TPM_RSA_KEY_PARMS len prim exp) = do
@@ -998,7 +999,7 @@ data TPM_SYMMETRIC_KEY_PARMS = TPM_SYMMETRIC_KEY_PARMS {
       tpmSymKeyLength    :: UINT32
     , tpmSymKeyBlockSize :: UINT32
     , tpmSymKeyIV        :: ByteString
-    } deriving (Show,Eq, Read)
+    } deriving (Show,Eq, Read, Generic)
 
 instance Binary TPM_SYMMETRIC_KEY_PARMS where
     put (TPM_SYMMETRIC_KEY_PARMS kl bs iv) = do
@@ -1118,7 +1119,7 @@ instance Binary TPM_KEY12 where
 -- TPM store public key structure as defined by section 10.4 of the document:
 --  TPM Main: Part 2 - TPM Structures
 -------------------------------------------------------------------------------
-newtype TPM_STORE_PUBKEY = TPM_STORE_PUBKEY ByteString deriving (Eq, Read, Show)
+newtype TPM_STORE_PUBKEY = TPM_STORE_PUBKEY ByteString deriving (Eq, Read, Show, Generic)
 
 {-
 instance Show TPM_STORE_PUBKEY where
@@ -1142,7 +1143,7 @@ instance Binary TPM_STORE_PUBKEY where
 data TPM_PUBKEY = TPM_PUBKEY {
       tpmPubKeyParams :: TPM_KEY_PARMS
     , tpmPubKeyData   :: TPM_STORE_PUBKEY
-    } deriving (Eq, Read, Show)
+    } deriving (Eq, Read, Show, Generic)
 
 {-
 instance Show TPM_PUBKEY where
