@@ -14,11 +14,28 @@ import TPMUtil
 import Keys
 import Provisioning
 
- 
-caEntity_Att :: {-EvidenceDescriptor -> -} Nonce -> TPM_PCR_SELECTION ->
-                IO ({-Evidence, -}Nonce, TPM_PCR_COMPOSITE,
-                       (SignedData TPM_PUBKEY), Signature)
-caEntity_Att {-dList-} nApp pcrSelect = do
+attReceive :: Entity_Address -> IO Appraiser_Request
+attReceive ea = do
+  {-TODO:  socket receive here (using entity address parameter) -}
+  let appReq :: Appraiser_Request
+      appReq = Appraiser_Request undefined undefined
+
+  return appReq
+
+attSend :: Attester_Response -> Entity_Address -> IO ()
+attSend attResp ea = do
+  {- TODO:  socket send here -}
+  return ();
+
+caEntity_Att :: Appraiser_Request ->
+                IO Attester_Response
+
+                {-(Nonce, TPM_PCR_COMPOSITE,
+                       (SignedData TPM_PUBKEY), Signature) -}
+caEntity_Att appReq = do
+  let
+    nApp = appnonce appReq
+    pcrSelect = apppcrSelect appReq
 
   putStrLn "Main of entity Attester:"
   {-takeInit
@@ -35,7 +52,10 @@ caEntity_Att {-dList-} nApp pcrSelect = do
   --putStrLn "before tpmMK_Idddddd"
   (iKeyHandle, aikContents) <- tpmMk_Id
   --putStrLn "after tpmMK_Id"
-  (ekEncBlob, kEncBlob) <- caEntity_CA aikContents
+  --(ekEncBlob, kEncBlob) <- caEntity_CA aikContents
+  caResp <- caEntity_CA aikContents
+  let ekEncBlob = symmKeyCipher caResp
+      kEncBlob = certCipher caResp
   sessKey <- tpmAct_Id iKeyHandle ekEncBlob
   let caCert :: (SignedData TPM_PUBKEY)
       caCert = realDecrypt sessKey kEncBlob
@@ -45,10 +65,17 @@ caEntity_Att {-dList-} nApp pcrSelect = do
   (pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
   let response = ({-evidence, -}nApp, pcrComp, caCert, qSig)
 
-  return response
+      attresponse :: Attester_Response
+      attresponse = (Attester_Response nApp pcrComp caCert qSig)
+  
+  return attresponse --response
+
+ {-(Nonce, TPM_PCR_COMPOSITE,
+                       (SignedData TPM_PUBKEY), Signature) -}
 
 
-caEntity_CA :: {-LibXenVChan -> -}AikContents -> IO (CipherText, CipherText)
+
+caEntity_CA :: {-LibXenVChan -> -}AikContents -> IO CA_Response
 caEntity_CA {-attChan-} aikContents = do
 
   {-[AEntityInfo eInfo,
@@ -75,7 +102,7 @@ caEntity_CA {-attChan-} aikContents = do
       enc = fromStrict encryptedCert
 
   {-send' attChan [ACipherText encBlob, ACipherText enc]-}
-  return (encBlob, enc)
+  return $ CA_Response encBlob enc  --(encBlob, enc)
  where
    symKey =
      TPM_SYMMETRIC_KEY

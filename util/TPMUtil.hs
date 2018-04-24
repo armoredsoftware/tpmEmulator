@@ -256,6 +256,11 @@ data Entity_Address = Entity_Address {
   ip :: Int {- TODO: real host info here -}
   }  deriving (Show, Read, Eq, Generic)
 
+data CA_Response = CA_Response {
+  symmKeyCipher :: CipherText,
+  certCipher    :: CipherText
+  }  deriving (Show, Read, Eq, Generic)
+                   
 
 encodeToText :: S.ByteString -> T.Text
 encodeToText = TE.decodeUtf8 . Base64.encode
@@ -271,6 +276,8 @@ instance DA.FromJSON L.ByteString where
         
 instance DA.ToJSON Appraiser_Request
 instance DA.ToJSON Attester_Response
+instance DA.ToJSON AikContents
+instance DA.ToJSON TPM_IDENTITY_CONTENTS
 --instance DA.ToJSON Entity_Address
 
 instance DA.ToJSON TPM_PCR_SELECTION

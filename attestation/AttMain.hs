@@ -5,6 +5,12 @@ import TPMUtil
 import AttesterUtil
             
 main = do
+  let 
+    ea :: Entity_Address
+    ea = Entity_Address 0 0
+  appReq <- attReceive ea
+  attResp <- caEntity_Att appReq
+  attSend attResp ea
   {-
   let ps = mkTPMRequest [23]
       n = 36
