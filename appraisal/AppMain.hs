@@ -1,8 +1,17 @@
 module Main where
 
-import AppraiserUtil (appmain')
-
+import TPM
+import TPMUtil
+import AppraiserUtil
+            
 main = do
-  s <- appmain'
-  putStrLn s
+  let ps = mkTPMRequest [23]
+      n = 34
+      appReq :: Appraiser_Request
+      appReq = Appraiser_Request ps n
+      ea :: Entity_Address
+      ea = Entity_Address 0 0
+  appSend appReq ea
+  attResp <- appReceive ea
+  evaluate appReq attResp
   return ()

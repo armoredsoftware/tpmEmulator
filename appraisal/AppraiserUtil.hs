@@ -12,22 +12,60 @@ import AttesterUtil (caEntity_Att)
 import Keys
 import Provisioning
 
-appmain' :: {-Int -> Channel -> -} IO String
-appmain' {-protoId chan-} = do
-  putStrLn "Main of entity Appraiser:"
-  {-env <- appCommInit chan protoId {-3-} -}
-  let pcrSelect = mkTPMRequest [23]
-      nonce = 34
-  putStrLn $ "Sending Request: ( " ++ (show pcrSelect) ++ ", Nonce ) \n"
-  (n, comp, cert, qSig) <- caEntity_Att nonce pcrSelect
-  evaluate (nonce, pcrSelect) (n, comp, cert, qSig)
+data Appraiser_Request = Appraiser_Request {
+  apppcrSelect :: TPM_PCR_SELECTION,
+  appnonce :: Nonce
+  }  deriving (Show, Read, Eq)
 
-evaluate :: {-Int -> -}({-[EvidenceDescriptor],-} Nonce, TPM_PCR_SELECTION) ->
-            ({-Evidence,-} Nonce, TPM_PCR_COMPOSITE,
-             (SignedData TPM_PUBKEY), Signature) -> IO String
-evaluate {-pId-} ({-d, -}nonceReq, pcrSelect)
-  ({-ev, -}nonceResp, pcrComp, cert@(SignedData aikPub aikSig), qSig) = do
-  --debugPrint "Inside Evaluate" --sequence $ [logf, putStrLn] <*> (pure ( "Inside Evaluate..."))
+data Attester_Response = Attester_Response {
+  attnonce :: Nonce,
+  comp  :: TPM_PCR_COMPOSITE,
+  attcert  :: (SignedData TPM_PUBKEY),
+  quoteSig  :: Signature
+  }  deriving (Show, Read, Eq)
+
+data Entity_Address = Entity_Address {
+  portNum :: Int,
+  ip :: Int {- TODO: real host info here -}
+  }  deriving (Show, Read, Eq)
+
+appSend :: Appraiser_Request -> Entity_Address -> IO ()
+appSend ar ea  = do
+  let ps = apppcrSelect ar
+      --n  = appnonce ar
+  putStrLn "Main of entity Appraiser:" 
+  putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
+  -- TODO:  socket send here
+
+  --(n, comp, cert, qSig) <- caEntity_Att nonce pcrSelect
+  --evaluate (nonce, pcrSelect) (n, comp, cert, qSig)
+
+appReceive :: Entity_Address -> IO Attester_Response
+appReceive ea = do
+  {-TODO:  socket receive here (using entity address parameter) -}
+  let resp :: Attester_Response
+      resp = Attester_Response undefined undefined undefined undefined
+  return resp
+  
+evaluate :: {-(Nonce, TPM_PCR_SELECTION) ->
+            (Nonce, TPM_PCR_COMPOSITE,
+             (SignedData TPM_PUBKEY), Signature)-}
+  Appraiser_Request -> Attester_Response
+  -> IO String
+evaluate appReq attResp   = do
+{-(nonceReq, pcrSelect)
+  (nonceResp, pcrComp, cert@(SignedData aikPub aikSig), qSig) -}
+
+
+  let nonceReq = appnonce appReq
+      pcrSelect = apppcrSelect appReq
+      nonceResp = attnonce attResp
+      pcrComp = comp attResp
+      cert = attcert attResp
+      aikPub = dat cert
+      aikSig = sig cert
+      qSig = quoteSig attResp
+  
   caPublicKey <- getCAPublicKey
 
   

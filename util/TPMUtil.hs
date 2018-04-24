@@ -143,7 +143,7 @@ type Signature = L.ByteString;
 data SignedData a = SignedData {
   dat :: a,
   sig :: Signature
-} deriving (Eq, Show)
+} deriving (Eq, Read, Show)
 
 instance (Binary a) => Binary (SignedData a) where
   put (SignedData a b) =
