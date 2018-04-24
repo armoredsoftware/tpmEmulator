@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric#-}
+{-# LANGUAGE DeriveGeneric, FlexibleInstances#-}
 module TPMUtil where
 
 import TPM
@@ -13,6 +13,11 @@ import Crypto.Cipher.AES
 --import Crypto.Hash.SHA1 (hashlazy)
 import System.Environment (getEnv)
 import GHC.Generics
+import qualified Data.Aeson as DA
+
+import qualified Data.Text.Encoding as TE
+import qualified Data.ByteString.Base64 as Base64
+import qualified Data.Text as T
 
 tpm :: TPMSocket
 tpm = tpm_socket "/var/run/tpm/tpmd_socket:0" --"/dev/tpm/tpmd_socket:0" 
@@ -228,3 +233,68 @@ tpmQuote qKeyHandle pcrSelect exDataList = do
       evBlobSha1 = bytestringDigest $ sha1 evBlob
   (comp, sig) <- mkQuote qKeyHandle iPass pcrSelect evBlobSha1
   return (comp, sig)
+
+
+
+
+-- Shared demo types -------------
+
+data Appraiser_Request = Appraiser_Request {
+  apppcrSelect :: TPM_PCR_SELECTION,
+  appnonce :: Nonce
+  }  deriving (Show, Read, Eq, Generic)
+
+data Attester_Response = Attester_Response {
+  attnonce :: Nonce,
+  comp  :: TPM_PCR_COMPOSITE,
+  attcert  :: (SignedData TPM_PUBKEY),
+  quoteSig  :: Signature
+  }  deriving (Show, Read, Eq, Generic)
+
+data Entity_Address = Entity_Address {
+  portNum :: Int,
+  ip :: Int {- TODO: real host info here -}
+  }  deriving (Show, Read, Eq, Generic)
+
+
+encodeToText :: S.ByteString -> T.Text
+encodeToText = TE.decodeUtf8 . Base64.encode
+
+decodeFromText :: T.Text -> L.ByteString
+decodeFromText = {-either fail return .-} L.fromStrict . Base64.decodeLenient . TE.encodeUtf8
+
+
+instance DA.ToJSON L.ByteString where
+        toJSON = DA.String . encodeToText . L.toStrict
+instance DA.FromJSON L.ByteString where
+        parseJSON (DA.String str) = pure $ decodeFromText str
+        
+instance DA.ToJSON Appraiser_Request
+instance DA.ToJSON Attester_Response
+--instance DA.ToJSON Entity_Address
+
+instance DA.ToJSON TPM_PCR_SELECTION
+instance DA.ToJSON TPM_PCR_COMPOSITE
+instance DA.ToJSON TPM_DIGEST
+instance DA.ToJSON TPM_PUBKEY
+instance DA.ToJSON TPM_STORE_PUBKEY
+instance DA.ToJSON TPM_KEY_PARMS
+instance DA.ToJSON TPM_SYMMETRIC_KEY_PARMS
+instance DA.ToJSON TPM_RSA_KEY_PARMS
+instance DA.ToJSON TPM_KEY_PARMS_DATA
+instance DA.ToJSON (SignedData TPM_PUBKEY)
+
+instance DA.FromJSON Appraiser_Request
+instance DA.FromJSON Attester_Response
+--instance DA.FromJSON Entity_Address
+
+instance DA.FromJSON TPM_PCR_SELECTION
+instance DA.FromJSON TPM_PCR_COMPOSITE
+instance DA.FromJSON TPM_DIGEST
+instance DA.FromJSON TPM_PUBKEY
+instance DA.FromJSON TPM_STORE_PUBKEY
+instance DA.FromJSON TPM_KEY_PARMS
+instance DA.FromJSON TPM_SYMMETRIC_KEY_PARMS
+instance DA.FromJSON TPM_RSA_KEY_PARMS
+instance DA.FromJSON TPM_KEY_PARMS_DATA
+instance DA.FromJSON (SignedData TPM_PUBKEY)

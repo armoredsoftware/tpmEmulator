@@ -39,6 +39,33 @@ executable BAD_App1
 		       
   main-is:            BAD_App1.hs
 
+executable AttMain
+
+  hs-source-dirs:      ./
+  other-modules:       AttesterUtil
+  build-depends:       base >= 4.7 && < 5,
+                       binary,
+                       bytestring,
+                       aeson,
+                       text,
+                       directory,
+                       base64-bytestring,  
+                       RSA,
+                       SHA,
+                       crypto-api,
+                       random,
+                       cipher-aes,
+                       process,
+
+                       
+                       tpm-emulator,
+                       tpm-util,
+                       provisioning,
+                       keys,
+                       attester-util
+		       
+  main-is:             AttMain.hs
+  
 library
   hs-source-dirs:      ./    
   exposed-modules:     AttesterUtil
