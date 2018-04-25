@@ -1,5 +1,7 @@
 module Main where
 
+import Control.Concurrent
+
 import TPM
 import TPMUtil
 import AppraiserUtil
@@ -12,6 +14,7 @@ main = do
       ea :: Entity_Address
       ea = Entity_Address 0 0
   appSend appReq ea
+  threadDelay 5
   --attResp <- appReceive ea
   --evaluate appReq attResp
   return ()

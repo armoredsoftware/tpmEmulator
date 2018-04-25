@@ -11,6 +11,8 @@ import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import qualified Data.Aeson as DA
 import GHC.Generics
 import System.Directory(removeFile)
+import Control.Concurrent(threadDelay)
+import System.Directory(doesFileExist)
 
 import TPM
 import TPMUtil
@@ -22,8 +24,22 @@ import qualified Data.Text.Encoding as TE
 import qualified Data.ByteString.Base64 as Base64
 import qualified Data.Text as T
 
+--appReqFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/appReq.txt"
+--attRespFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/attResp.txt"
 
+appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
+attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
+waitForFile :: IO ()
+waitForFile = do
+  fileExists <- (doesFileExist attRespFile)
+  if (not fileExists)
+    then do
+      threadDelay 2
+      waitForFile      
+    else do
+      putStrLn "Waiting for Appraiser Request..."
+      return ()
 
 appSend :: Appraiser_Request -> Entity_Address -> IO ()
 appSend ar ea  = do
@@ -33,12 +49,13 @@ appSend ar ea  = do
   putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
   -- TODO:  socket send here
   let lbJsonAppReq = DA.encode ar
-  LB.writeFile "./appReq.txt" lbJsonAppReq
-  lbsRead <- LB.readFile "./appReq.txt"
+  LB.writeFile appReqFile lbJsonAppReq
+  {-lbsRead <- LB.readFile "./appReq.txt"
   let
     newAppReq :: Maybe Appraiser_Request
     newAppReq = DA.decode lbsRead
   putStrLn (show newAppReq)
+  -}
   --removeFile "./appReq.txt"
   return ()
   
@@ -52,9 +69,19 @@ appSend ar ea  = do
 appReceive :: Entity_Address -> IO Attester_Response
 appReceive ea = do
   {-TODO:  socket receive here (using entity address parameter) -}
-  let resp :: Attester_Response
-      resp = Attester_Response undefined undefined undefined undefined
-  return resp
+
+  waitForFile
+  lbsRead <- LB.readFile attRespFile
+  let
+    maybeAttResp :: Maybe Attester_Response
+    maybeAttResp = DA.decode lbsRead
+
+  case maybeAttResp of
+     (Just attResp) -> do
+       putStrLn $ "Received attester response: " ++ (show attResp) ++ "\n"
+       return attResp
+     _ -> error "error decoding attestation response"
+     
   
 evaluate :: {-(Nonce, TPM_PCR_SELECTION) ->
             (Nonce, TPM_PCR_COMPOSITE,

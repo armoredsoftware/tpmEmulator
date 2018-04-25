@@ -78,6 +78,8 @@ library
                        random,
                        cipher-aes,
                        process,
+                       aeson,
+                       directory,
                        
                        tpm-emulator,
                        tpm-util,
