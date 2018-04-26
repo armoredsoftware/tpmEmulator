@@ -1,5 +1,7 @@
 module Main where
 
+import Control.Concurrent(threadDelay)
+
 import TPM
 import TPMUtil
 import AttesterUtil
@@ -11,6 +13,8 @@ main = do
   appReq <- attReceive ea
   attResp <- caEntity_Att appReq
   attSend attResp ea
+  threadDelay 2000000
+  main
   {-
   let ps = mkTPMRequest [23]
       n = 36
