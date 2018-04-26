@@ -13,14 +13,6 @@ build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
 
-executable App2
-  build-depends:       base >= 4.7 && < 5		       
-  main-is:            App2.hs
-
-executable BAD_App2
-  build-depends:       base >= 4.7 && < 5	       
-  main-is:            BAD_App2.hs
-
 executable App1
   build-depends:       base >= 4.7 && < 5,
                        bytestring,
