@@ -30,7 +30,7 @@ waitForFile = do
   if (not fileExists)
     then do
       putStrLn "Waiting for Appraiser Request..."
-      threadDelay 2
+      threadDelay 2000000
       waitForFile      
     else do
       return ()

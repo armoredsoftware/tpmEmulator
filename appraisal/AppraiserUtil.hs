@@ -35,10 +35,10 @@ waitForFile = do
   fileExists <- (doesFileExist attRespFile)
   if (not fileExists)
     then do
-      threadDelay 2
+      putStrLn "Waiting for Attester Response..."
+      threadDelay 2000000
       waitForFile      
     else do
-      putStrLn "Waiting for Appraiser Request..."
       return ()
 
 appSend :: Appraiser_Request -> Entity_Address -> IO ()
