@@ -29,10 +29,10 @@ waitForFile = do
   fileExists <- (doesFileExist appReqFile)
   if (not fileExists)
     then do
+      putStrLn "Waiting for Appraiser Request..."
       threadDelay 2
       waitForFile      
     else do
-      putStrLn "Waiting for Appraiser Request..."
       return ()
 
 attReceive :: Entity_Address -> IO Appraiser_Request
