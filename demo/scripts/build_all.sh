@@ -3,7 +3,7 @@
 te=$DEMO_PATH
 
 fun() {
-    #printf "\nBuilding $1...\n\n"
+    printf "\nBuilding $1...\n\n"
     #rm -rf .stack-work/ ;
     stack build --allow-different-user #--ghc-options "fPIC"
 }
@@ -16,5 +16,4 @@ fun() {
 
 #cd /home/adam/tpmEmulator/appraisal; fun "appraisal"
 cd $te"/../appraisal"; fun "appraisal"
-
-#cd $te"/../attestation"; fun "attestation"
+cd $te"/../attestation"; fun "attestation"
