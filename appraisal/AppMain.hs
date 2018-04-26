@@ -1,6 +1,7 @@
 module Main where
 
-import Control.Concurrent
+import Control.Concurrent(threadDelay)
+import System.Directory(removeFile)
 
 import TPM
 import TPMUtil
@@ -17,4 +18,6 @@ main = do
   threadDelay 5
   attResp <- appReceive ea
   evaluate appReq attResp
+  removeFile appReqFile
+  removeFile attRespFile
   return ()
