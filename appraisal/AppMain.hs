@@ -15,6 +15,6 @@ main = do
       ea = Entity_Address 0 0
   appSend appReq ea
   threadDelay 5
-  --attResp <- appReceive ea
-  --evaluate appReq attResp
+  attResp <- appReceive ea
+  evaluate appReq attResp
   return ()
