@@ -1,7 +1,12 @@
 #!/bin/bash
 
+te=$DEMO_PATH
+#ted=$DEPLOY_PATH
+pr=$te"/provisioning"
+
 make clean
 (cd scripts ; ./restart_tpm.sh; ./build_all.sh; ./deploy_executables.sh)
 make provision
-make run
+cd $te"/appraisal/"; ./AppMain
+#make run
 
