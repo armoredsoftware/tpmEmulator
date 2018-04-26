@@ -3,13 +3,13 @@ all: build
 build:
 	@(cd scripts; ./make_all.sh)
 
-provision: provisioning/ProvisioningMain
+provision: #provisioning/ProvisioningMain
 	(cd scripts; ./deploy_provisioning.sh)
 
 measure: #provisioning/ProvisioningMain
 	(cd scripts; ./measure.sh)
 
-provisioning/ProvisioningMain: build
+#provisioning/ProvisioningMain: build
 
 clean:
 	@(cd scripts; ./clean_all.sh)
