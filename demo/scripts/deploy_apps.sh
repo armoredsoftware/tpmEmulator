@@ -3,7 +3,7 @@
 te=$DEMO_PATH
 #ted=$DEPLOY_PATH
 #teb=$te"/../"
-sw=$SW_PATH #$te"/../appraisal/.stack-work/install/i386-linux/lts-6.31/7.10.3/bin"
+sw=$SWatt_PATH #$te"/../appraisal/.stack-work/install/i386-linux/lts-6.31/7.10.3/bin"
 
 
 #te=$DEMO_PATH
