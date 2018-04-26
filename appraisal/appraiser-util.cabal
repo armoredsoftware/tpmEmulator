@@ -31,8 +31,7 @@ library
                        tpm-emulator,
                        tpm-util,
                        provisioning,
-                       keys,
-                       attester-util
+                       keys
 		       
 executable AppMain
 
@@ -54,8 +53,7 @@ executable AppMain
                        tpm-emulator,
                        tpm-util,
                        provisioning,
-                       keys,
-                       attester-util
+                       keys
 		       
   main-is:             AppMain.hs
       		       

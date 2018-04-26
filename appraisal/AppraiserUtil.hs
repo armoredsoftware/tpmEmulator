@@ -16,7 +16,7 @@ import System.Directory(doesFileExist)
 
 import TPM
 import TPMUtil
-import AttesterUtil (caEntity_Att)
+--import AttesterUtil (caEntity_Att)
 import Keys
 import Provisioning
 

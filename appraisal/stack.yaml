@@ -5,5 +5,4 @@ packages:
 - '../'
 - '../util/provisioning/'
 - '../util/keys/'
-- '../attestation'
 extra-deps: []
