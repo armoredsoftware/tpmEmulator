@@ -8,8 +8,8 @@ import qualified Control.Exception as E
 import Control.Monad (unless, forever, void)
 import qualified Data.ByteString as S
 import qualified Data.ByteString.Char8 as C
-import Network.Socket hiding (send,recv)
-import Network.Socket.ByteString (send,recv, sendAll)
+import Network.Socket hiding (recv)
+import Network.Socket.ByteString (recv, sendAll)
 
 portListen :: IO ()
 portListen = withSocketsDo $ do
@@ -35,10 +35,8 @@ portListen = withSocketsDo $ do
         void $ forkFinally (talk conn) (\_ -> do close conn)
     talk conn = do
         msg <- recv conn 1024
-        --S.writeFile "/home/odroid/Documents/netcom/networksocket/socketComms/temp" msg
-        
+        S.writeFile "/home/odroid/Documents/netcom/networksocket/socketComms/temp" msg
         unless (S.null msg) $ do
-          C.putStrLn msg
           sendAll conn msg
           talk conn
 
@@ -56,7 +54,7 @@ portSend myIP myMsg = withSocketsDo $ do
         connect sock $ addrAddress addr
         return sock
     talk sock = do
-        myInt <- send sock $ {-C.unpack-} myMsg
+        myInt <- send sock $ C.unpack myMsg
         putStrLn $ show myInt
         msg <- recv sock 1024
         putStr "Received: "
