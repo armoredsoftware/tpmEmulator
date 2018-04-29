@@ -12,7 +12,7 @@ import Comm
 main = do
   portListen
   threadDelay 1
-  bString <- S.readFile "/home/odroid/Documents/netcom/networksocket/socketComms/temp"
+  bString <- S.readFile "/home/adam/tpmEmulator/demo/attestation/temp.txt"
   putStr "from client: "
   C.putStrLn bString
   putStrLn "end"

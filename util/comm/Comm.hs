@@ -35,7 +35,7 @@ portListen = withSocketsDo $ do
         void $ forkFinally (talk conn) (\_ -> do close conn)
     talk conn = do
         msg <- recv conn 1024
-        S.writeFile "/home/odroid/Documents/netcom/networksocket/socketComms/temp" msg
+        S.writeFile "/home/adam/tpmEmulator/demo/attestation/temp.txt" msg
         unless (S.null msg) $ do
           sendAll conn msg
           talk conn
