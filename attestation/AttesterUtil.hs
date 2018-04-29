@@ -2,7 +2,7 @@ module AttesterUtil where
 
 import Data.Binary
 import qualified Data.ByteString.Lazy as LB hiding (map, putStrLn)
---import qualified Data.ByteString as S
+import qualified Data.ByteString as S
 import Crypto.Cipher.AES
 --import qualified Codec.Crypto.RSA as C
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
@@ -44,10 +44,10 @@ attReceive ea = do
   {-TODO:  socket receive here (using entity address parameter) -}
 
   portListen
-  threadDelay 1
-  lbsRead <- LB.readFile "/home/adam/tpmEmulator/demo/attestation/temp.txt"
+  threadDelay 3000000
+  lbsRead <- S.readFile "/home/adam/tpmEmulator/demo/attestation/temp.txt"
   Prelude.putStr "from client: "
-  C.putStrLn (LB.toStrict lbsRead)
+  C.putStrLn lbsRead
   Prelude.putStrLn "end"
 
   
@@ -57,7 +57,7 @@ attReceive ea = do
   
   let
     maybeAppReq :: Maybe Appraiser_Request
-    maybeAppReq = DA.decode lbsRead
+    maybeAppReq = DA.decode (LB.fromStrict lbsRead)
     
   case maybeAppReq of
    (Just appReq) -> do
