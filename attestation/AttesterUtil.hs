@@ -2,8 +2,9 @@ module AttesterUtil where
 
 import Data.Binary
 import qualified Data.ByteString.Lazy as LB hiding (map, putStrLn)
+--import qualified Data.ByteString as S
 import Crypto.Cipher.AES
-import qualified Codec.Crypto.RSA as C
+--import qualified Codec.Crypto.RSA as C
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import System.Process (system)
 import System.Environment (getEnv)
@@ -11,12 +12,14 @@ import qualified Data.Aeson as DA
 import Control.Monad(unless)
 import System.Directory(doesFileExist)
 import Control.Concurrent
+import Data.ByteString.Char8 as C
 
 
 import TPM
 import TPMUtil
 import Keys
 import Provisioning
+import Comm
 
 --appReqFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/attResp.txt"
@@ -24,34 +27,44 @@ import Provisioning
 appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
 attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
-waitForFile :: IO ()
+{-waitForFile :: IO ()
 waitForFile = do
   fileExists <- (doesFileExist appReqFile)
   if (not fileExists)
     then do
-      putStrLn "Waiting for Appraiser Request..."
+      Prelude.putStrLn "Waiting for Appraiser Request..."
       threadDelay 2000000
       waitForFile      
     else do
       return ()
+-}
 
 attReceive :: Entity_Address -> IO Appraiser_Request
 attReceive ea = do
   {-TODO:  socket receive here (using entity address parameter) -}
-      
-    waitForFile
-    lbsRead <- LB.readFile appReqFile
-         
-    let
-      maybeAppReq :: Maybe Appraiser_Request
-      maybeAppReq = DA.decode lbsRead
 
-    case maybeAppReq of
-     (Just appReq) -> do
-       putStrLn $ "Received appraiser request: " ++ (show appReq) ++ "\n"
-       return appReq
+  portListen
+  threadDelay 1
+  lbsRead <- LB.readFile "/home/adam/tpmEmulator/demo/attestation/temp.txt"
+  Prelude.putStr "from client: "
+  C.putStrLn (LB.toStrict lbsRead)
+  Prelude.putStrLn "end"
+
+  
+  
+  --waitForFile
+  --lbsRead <- LB.readFile appReqFile
+  
+  let
+    maybeAppReq :: Maybe Appraiser_Request
+    maybeAppReq = DA.decode lbsRead
+    
+  case maybeAppReq of
+   (Just appReq) -> do
+     Prelude.putStrLn $ "Received appraiser request: " ++ (show appReq) ++ "\n"
+     return appReq
        
-     _ -> error "error decoding appraiser request"
+   _ -> error "error decoding appraiser request"
 
 attSend :: Attester_Response -> Entity_Address -> IO ()
 attSend attResp ea = do
@@ -59,7 +72,7 @@ attSend attResp ea = do
 
   let lbJsonAttResp = DA.encode attResp
   LB.writeFile attRespFile lbJsonAttResp
-  putStrLn $ "Sent attester response: " ++ (show attResp) ++ "\n"
+  Prelude.putStrLn $ "Sent attester response: " ++ (show attResp) ++ "\n"
   return ()
 
 caEntity_Att :: Appraiser_Request ->
@@ -72,21 +85,21 @@ caEntity_Att appReq = do
     nApp = appnonce appReq
     pcrSelect = apppcrSelect appReq
 
-  putStrLn "Main of entity Attester:"
+  Prelude.putStrLn "Main of entity Attester:"
   {-takeInit
   pcrReset
   fn <- prependDemoDir "attestation/App1"
   h <- myHash fn
-  putStrLn $ "Hash of App1: \n" ++ (show (LB.fromStrict h))
+  Prelude.putStrLn $ "Hash of App1: \n" ++ (show (LB.fromStrict h))
   val <- pcrExtendDemo (LB.fromStrict h)
-  putStrLn "Extended into PCR.  New PCR value:"
-  putStrLn $ (show val) ++ "\n"
+  Prelude.putStrLn "Extended into PCR.  New PCR value:"
+  Prelude.putStrLn $ (show val) ++ "\n"
   system fn
   -}
 
-  --putStrLn "before tpmMK_Idddddd"
+  --Prelude.putStrLn "before tpmMK_Idddddd"
   (iKeyHandle, aikContents) <- tpmMk_Id
-  --putStrLn "after tpmMK_Id"
+  --Prelude.putStrLn "after tpmMK_Id"
   --(ekEncBlob, kEncBlob) <- caEntity_CA aikContents
   caResp <- caEntity_CA aikContents
   let ekEncBlob = symmKeyCipher caResp
@@ -96,7 +109,7 @@ caEntity_Att appReq = do
       caCert = realDecrypt sessKey kEncBlob
 
       quoteExData = [nApp]
-  --putStrLn "before quote"
+  --Prelude.putStrLn "before quote"
   (pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
   let response = ({-evidence, -}nApp, pcrComp, caCert, qSig)
 

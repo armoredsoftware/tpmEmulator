@@ -19,6 +19,7 @@ import TPMUtil
 --import AttesterUtil (caEntity_Att)
 import Keys
 import Provisioning
+import Comm
 
 import qualified Data.Text.Encoding as TE
 import qualified Data.ByteString.Base64 as Base64
@@ -49,7 +50,11 @@ appSend ar ea  = do
   putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
   -- TODO:  socket send here
   let lbJsonAppReq = DA.encode ar
-  LB.writeFile appReqFile lbJsonAppReq
+
+  portSend "192.168.65.132" (LB.toStrict lbJsonAppReq)
+  --LB.writeFile appReqFile lbJsonAppReq
+
+
   {-lbsRead <- LB.readFile "./appReq.txt"
   let
     newAppReq :: Maybe Appraiser_Request
