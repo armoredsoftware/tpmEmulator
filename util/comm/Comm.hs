@@ -35,11 +35,15 @@ portListen = withSocketsDo $ do
         void $ forkFinally (talk conn) (\_ -> do close conn)
     talk conn = do
         msg <- recv conn 1024
+	putStrLn "Msg received ... : "
         S.putStrLn msg
         S.writeFile "/home/adam/tpmEmulator/demo/attestation/temp.txt" msg
+	return ()
+	{-
         unless (S.null msg) $ do
           sendAll conn msg
           talk conn
+	  -}
 
 portSend :: String -> S.ByteString -> IO ()
 portSend myIP myMsg = withSocketsDo $ do
