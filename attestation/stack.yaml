@@ -5,4 +5,5 @@ packages:
 - '../'
 - '../util/provisioning/'
 - '../util/keys/'
+- '../util/comm/'
 extra-deps: []

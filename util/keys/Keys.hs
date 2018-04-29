@@ -7,7 +7,8 @@ import System.Random
 import System.IO
 import Data.Binary
 
-import TPM
+--import TPM
+
 
 caPublicKeyFile :: FilePath
 caPublicKeyFile = "caPublicKey.txt"

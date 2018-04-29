@@ -31,7 +31,9 @@ library
                        tpm-emulator,
                        tpm-util,
                        provisioning,
-                       keys
+                       keys,
+                       comm
+                       
 		       
 executable AppMain
 
@@ -53,7 +55,8 @@ executable AppMain
                        tpm-emulator,
                        tpm-util,
                        provisioning,
-                       keys
+                       keys,
+                       comm
 		       
   main-is:             AppMain.hs
       		       

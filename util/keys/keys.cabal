@@ -23,11 +23,11 @@ library
                        --SHA,
                        --cipher-aes,
                        crypto-api,
-                       random,
+                       random
                        --cryptohash,
                        --cryptonite,
                        --process,
                        
-                       tpm-emulator
+                       --tpm-emulator
 		       
   default-language:    Haskell2010

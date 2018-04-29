@@ -54,6 +54,7 @@ executable AttMain
                        tpm-util,
                        provisioning,
                        keys,
+                       comm,
                        attester-util
 		       
   main-is:             AttMain.hs
@@ -76,6 +77,7 @@ library
                        tpm-emulator,
                        tpm-util,
                        keys,
+                       comm,
                        provisioning
        		       
   default-language:    Haskell2010

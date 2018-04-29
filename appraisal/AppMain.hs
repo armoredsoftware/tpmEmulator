@@ -6,8 +6,13 @@ import System.Directory(removeFile)
 import TPM
 import TPMUtil
 import AppraiserUtil
+import Comm(portSend)
+import Data.ByteString.Char8 as C
             
 main = do
+
+  portSend "192.168.65.132" $ C.pack "test msg hiiii hii hi"
+  {-
   let ps = mkTPMRequest [23]
       n = 36
       appReq :: Appraiser_Request
@@ -20,4 +25,6 @@ main = do
   evaluate appReq attResp
   removeFile appReqFile
   removeFile attRespFile
+-}
+  
   return ()

@@ -5,8 +5,12 @@ import Control.Concurrent(threadDelay)
 import TPM
 import TPMUtil
 import AttesterUtil
+import Comm
             
 main = do
+  portListen
+  
+  {-
   let 
     ea :: Entity_Address
     ea = Entity_Address 0 0
@@ -15,6 +19,10 @@ main = do
   attSend attResp ea
   threadDelay 2000000
   main
+
+
+-}
+  
   {-
   let ps = mkTPMRequest [23]
       n = 36
