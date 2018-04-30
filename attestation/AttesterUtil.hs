@@ -49,19 +49,12 @@ waitForFile f = do
 
 attReceive :: Entity_Address -> IO Appraiser_Request
 attReceive ea = do
-  {-TODO:  socket receive here (using entity address parameter) -}
-
   portListen appReqFile
   waitForFile appReqFile
   lbsRead <- LB.readFile appReqFile
   Prelude.putStr "from client: "
   C.putStrLn (LB.toStrict lbsRead)
   Prelude.putStrLn "end"
-
-  
-  
-  --waitForFile
-  --lbsRead <- LB.readFile appReqFile
   
   let
     maybeAppReq :: Maybe Appraiser_Request
@@ -76,13 +69,10 @@ attReceive ea = do
 
 attSend :: Attester_Response -> Entity_Address -> IO ()
 attSend attResp ea = do
-  {- TODO:  socket send here -}
 
   let lbJsonAttResp = DA.encode attResp
   Prelude.putStrLn "after encoded attResp..."
-
   portSend "192.168.65.132" (LB.toStrict lbJsonAttResp)
-  --LB.writeFile attRespFile lbJsonAttResp
   Prelude.putStrLn $ "Sent attester response: " ++ (show attResp) ++ "\n"
   return ()
 
@@ -95,11 +85,7 @@ logTime f st et =
       absdiff = abs diff in
      System.IO.appendFile f ((show absdiff) ++ "\n")
      
-caEntity_Att :: Appraiser_Request ->
-                IO Attester_Response
-
-                {-(Nonce, TPM_PCR_COMPOSITE,
-                       (SignedData TPM_PUBKEY), Signature) -}
+caEntity_Att :: Appraiser_Request -> IO Attester_Response
 caEntity_Att appReq = do
   let
     nApp = appnonce appReq
@@ -126,8 +112,6 @@ caEntity_Att appReq = do
   endTime <- getTime Monotonic
 
   logTime timesFile startTime endTime
-  
-  --(ekEncBlob, kEncBlob) <- caEntity_CA aikContents
   caResp <- caEntity_CA aikContents
   let ekEncBlob = symmKeyCipher caResp
       kEncBlob = certCipher caResp
@@ -144,25 +128,19 @@ caEntity_Att appReq = do
   --Prelude.putStrLn "before quote"
 
   qstartTime <- getTime Monotonic
-  --(pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
-  (pcrComp, qSig) <- tpmQuote newIkeyHandle pcrSelect quoteExData
+  (pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
+  --(pcrComp, qSig) <- tpmQuote newIkeyHandle pcrSelect quoteExData {- NOTE:  uncomment this line for bad quote sig attack-}
   qendTime <- getTime Monotonic
   logTime qtimesFile qstartTime qendTime
   
-  let response = ({-evidence, -}nApp, pcrComp, caCert, qSig)
+  let
+    attresponse :: Attester_Response
+    attresponse = (Attester_Response nApp pcrComp caCert qSig)
+                    
+  return attresponse
 
-      attresponse :: Attester_Response
-      attresponse = (Attester_Response nApp pcrComp caCert qSig)
-  
-  return attresponse --response
-
- {-(Nonce, TPM_PCR_COMPOSITE,
-                       (SignedData TPM_PUBKEY), Signature) -}
-
-
-
-caEntity_CA :: {-LibXenVChan -> -}AikContents -> IO CA_Response
-caEntity_CA {-attChan-} aikContents = do
+caEntity_CA :: AikContents -> IO CA_Response
+caEntity_CA aikContents = do
 
   {-[AEntityInfo eInfo,
    ASignedData (SignedData

@@ -44,40 +44,19 @@ waitForFile f = do
     else do
       return ()
 
-
 appSend :: Appraiser_Request -> Entity_Address -> IO ()
 appSend ar ea  = do
   let ps = apppcrSelect ar
       --n  = appnonce ar
   Prelude.putStrLn "Main of entity Appraiser:" 
   Prelude.putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
-  -- TODO:  socket send here
   let lbJsonAppReq = DA.encode ar
 
   portSend "192.168.65.132" (LB.toStrict lbJsonAppReq)
-  --LB.writeFile appReqFile lbJsonAppReq
-
-
-  {-lbsRead <- LB.readFile "./appReq.txt"
-  let
-    newAppReq :: Maybe Appraiser_Request
-    newAppReq = DA.decode lbsRead
-  Prelude.putStrLn (show newAppReq)
-  -}
-  --removeFile "./appReq.txt"
   return ()
-  
-
-
-  
-
-  --(n, comp, cert, qSig) <- caEntity_Att nonce pcrSelect
-  --evaluate (nonce, pcrSelect) (n, comp, cert, qSig)
 
 appReceive :: Entity_Address -> IO Attester_Response
 appReceive ea = do
-  {-TODO:  socket receive here (using entity address parameter) -}
-
   portListen attRespFile
   waitForFile attRespFile
   lbsRead <- LB.readFile attRespFile
@@ -95,16 +74,8 @@ appReceive ea = do
      _ -> error "error decoding attestation response"
      
   
-evaluate :: {-(Nonce, TPM_PCR_SELECTION) ->
-            (Nonce, TPM_PCR_COMPOSITE,
-             (SignedData TPM_PUBKEY), Signature)-}
-  Appraiser_Request -> Attester_Response
-  -> IO String
+evaluate :: Appraiser_Request -> Attester_Response -> IO String
 evaluate appReq attResp   = do
-{-(nonceReq, pcrSelect)
-  (nonceResp, pcrComp, cert@(SignedData aikPub aikSig), qSig) -}
-
-
   let nonceReq = appnonce appReq
       pcrSelect = apppcrSelect appReq
       nonceResp = attnonce attResp
