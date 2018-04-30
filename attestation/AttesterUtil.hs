@@ -45,7 +45,7 @@ attReceive ea = do
 
   portListen appReqFile
   waitForFile appReqFile
-  lbsRead <- S.readFile appReqFile
+  lbsRead <- LB.readFile appReqFile
   Prelude.putStr "from client: "
   C.putStrLn lbsRead
   Prelude.putStrLn "end"
@@ -57,7 +57,7 @@ attReceive ea = do
   
   let
     maybeAppReq :: Maybe Appraiser_Request
-    maybeAppReq = DA.decode (LB.fromStrict lbsRead)
+    maybeAppReq = DA.decode (lbsRead)
     
   case maybeAppReq of
    (Just appReq) -> do

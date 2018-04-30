@@ -80,13 +80,13 @@ appReceive ea = do
 
   portListen attRespFile
   waitForFile attRespFile
-  lbsRead <- BS.readFile attRespFile
+  lbsRead <- LB.readFile attRespFile
   Prelude.putStr "from server: "
   C.putStrLn lbsRead
   Prelude.putStrLn "end"
   let
     maybeAttResp :: Maybe Attester_Response
-    maybeAttResp = DA.decode (LB.fromStrict lbsRead)
+    maybeAttResp = DA.decode (lbsRead)
 
   case maybeAttResp of
      (Just attResp) -> do
