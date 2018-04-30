@@ -24,7 +24,7 @@ main = do
     ea :: Entity_Address
     ea = Entity_Address 0 0
   appReq <- attReceive ea
-  {-
+  
   attResp <- caEntity_Att appReq
   attSend attResp ea
   threadDelay 2000000

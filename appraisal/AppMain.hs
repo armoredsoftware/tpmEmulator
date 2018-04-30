@@ -8,6 +8,7 @@ import TPMUtil
 import AppraiserUtil
 --import Comm(portSend)
 import Data.ByteString.Char8 as C
+import Comm(appReqFile, attRespFile)
             
 main = do
 
@@ -21,12 +22,12 @@ main = do
       ea :: Entity_Address
       ea = Entity_Address 0 0
   appSend appReq ea
-  {-
+  
   threadDelay 5
   attResp <- appReceive ea
   evaluate appReq attResp
   removeFile appReqFile
   removeFile attRespFile
--}
+
   
   return ()
