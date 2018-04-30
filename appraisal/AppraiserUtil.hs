@@ -79,7 +79,7 @@ appReceive ea = do
   {-TODO:  socket receive here (using entity address parameter) -}
 
   portListen attRespFile
-  --waitForFile attRespFile
+  waitForFile attRespFile
   lbsRead <- LB.readFile attRespFile
   Prelude.putStr "from server: "
   C.putStrLn (LB.toStrict lbsRead)
