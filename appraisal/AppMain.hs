@@ -2,7 +2,6 @@ module Main where
 
 import Control.Concurrent(threadDelay)
 import System.Directory(removeFile)
-import Control.Monad(replicateM_)
 
 import TPM
 import TPMUtil
@@ -11,7 +10,7 @@ import AppraiserUtil
 import Data.ByteString.Char8 as C
 import Comm(appReqFile, attRespFile)
             
-main = replicateM_ 8 $ do 
+main = do 
   let ps = mkTPMRequest [23]
       n = 36
       appReq :: Appraiser_Request
