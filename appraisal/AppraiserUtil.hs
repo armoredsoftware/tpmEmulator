@@ -32,6 +32,8 @@ import qualified Data.Text as T
 --appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
+--portNum = "192.168.65.132"
+portNumber = "129.237.123.192"
 
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
@@ -52,7 +54,7 @@ appSend ar ea  = do
   Prelude.putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
   let lbJsonAppReq = DA.encode ar
 
-  portSend "192.168.65.132" (LB.toStrict lbJsonAppReq)
+  portSend portNumber (LB.toStrict lbJsonAppReq)
   return ()
 
 appReceive :: Entity_Address -> IO Attester_Response

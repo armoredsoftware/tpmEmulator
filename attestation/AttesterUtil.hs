@@ -29,11 +29,8 @@ import Comm
 --appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
-timesFile = "/home/adam/tpmEmulator/demo/attestation/times.txt"
-
-ctimesFile = "/home/adam/tpmEmulator/demo/attestation/ctimes.txt"
-
-qtimesFile = "/home/adam/tpmEmulator/demo/attestation/qtimes.txt"
+--portNum = "192.168.65.132"
+portNumber = "129.237.123.192"
 
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
@@ -72,7 +69,7 @@ attSend attResp ea = do
 
   let lbJsonAttResp = DA.encode attResp
   Prelude.putStrLn "after encoded attResp..."
-  portSend "192.168.65.132" (LB.toStrict lbJsonAttResp)
+  portSend portNumber (LB.toStrict lbJsonAttResp)
   Prelude.putStrLn $ "Sent attester response: " ++ (show attResp) ++ "\n"
   return ()
 
@@ -87,6 +84,10 @@ logTime f st et =
      
 caEntity_Att :: Appraiser_Request -> IO Attester_Response
 caEntity_Att appReq = do
+  timesFile <- prependDemoDir "attestation/times.txt"
+  ctimesFile <-prependDemoDir "attestation/ctimes.txt"
+  qtimesFile <- prependDemoDir "attestation/qtimes.txt"
+  
   let
     nApp = appnonce appReq
     --nApp = 0 {- NOTE:  uncomment this line for nonce attack-}
