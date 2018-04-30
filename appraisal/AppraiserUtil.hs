@@ -6,13 +6,14 @@ import Data.Binary as B
 import qualified Data.ByteString.Lazy as LB hiding (pack, map, putStrLn)
 import Data.ByteString as BS hiding (putStrLn)
 --import Crypto.Cipher.AES
-import qualified Codec.Crypto.RSA as C
+--import qualified Codec.Crypto.RSA as C
 import Data.Digest.Pure.SHA (bytestringDigest, sha1)
 import qualified Data.Aeson as DA
 import GHC.Generics
 import System.Directory(removeFile)
 import Control.Concurrent(threadDelay)
 import System.Directory(doesFileExist)
+import Data.ByteString.Char8 as C
 
 import TPM
 import TPMUtil
@@ -32,14 +33,14 @@ import qualified Data.Text as T
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
 
-waitForFile :: IO ()
-waitForFile = do
-  fileExists <- (doesFileExist attRespFile)
+waitForFile :: FilePath -> IO ()
+waitForFile f = do
+  fileExists <- (doesFileExist f)
   if (not fileExists)
     then do
-      putStrLn "Waiting for Attester Response..."
+      Prelude.putStrLn "Waiting for Attester Response..."
       threadDelay 2000000
-      waitForFile      
+      waitForFile f      
     else do
       return ()
 
@@ -48,8 +49,8 @@ appSend :: Appraiser_Request -> Entity_Address -> IO ()
 appSend ar ea  = do
   let ps = apppcrSelect ar
       --n  = appnonce ar
-  putStrLn "Main of entity Appraiser:" 
-  putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
+  Prelude.putStrLn "Main of entity Appraiser:" 
+  Prelude.putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
   -- TODO:  socket send here
   let lbJsonAppReq = DA.encode ar
 
@@ -61,7 +62,7 @@ appSend ar ea  = do
   let
     newAppReq :: Maybe Appraiser_Request
     newAppReq = DA.decode lbsRead
-  putStrLn (show newAppReq)
+  Prelude.putStrLn (show newAppReq)
   -}
   --removeFile "./appReq.txt"
   return ()
@@ -77,15 +78,19 @@ appReceive :: Entity_Address -> IO Attester_Response
 appReceive ea = do
   {-TODO:  socket receive here (using entity address parameter) -}
 
-  waitForFile
-  lbsRead <- LB.readFile attRespFile
+  portListen attRespFile
+  waitForFile attRespFile
+  lbsRead <- BS.readFile attRespFile
+  Prelude.putStr "from server: "
+  C.putStrLn lbsRead
+  Prelude.putStrLn "end"
   let
     maybeAttResp :: Maybe Attester_Response
-    maybeAttResp = DA.decode lbsRead
+    maybeAttResp = DA.decode (LB.fromStrict lbsRead)
 
   case maybeAttResp of
      (Just attResp) -> do
-       putStrLn $ "Received attester response: " ++ (show attResp) ++ "\n"
+       Prelude.putStrLn $ "Received attester response: " ++ (show attResp) ++ "\n"
        return attResp
      _ -> error "error decoding attestation response"
      
@@ -129,13 +134,13 @@ evaluate appReq attResp   = do
   goldenPcrComposite <- readGoldenComp
 
   let r4 = pcrComp == goldenPcrComposite
-  putStrLn ("Actual PCR Composite: \n" ++ (show pcrComp) ++ "\n")
-  putStrLn ("Golden PCR Composite: \n" ++ (show goldenPcrComposite) ++ "\n")
+  Prelude.putStrLn ("Actual PCR Composite: \n" ++ (show pcrComp) ++ "\n")
+  Prelude.putStrLn ("Golden PCR Composite: \n" ++ (show goldenPcrComposite) ++ "\n")
 
-  sequence $ [{-logf, -}putStrLn] <*> (pure ("CACert Signature: " ++ (show r1)))
-  sequence $ [{-logf, -}putStrLn] <*> (pure ( "Quote Package Signature: " ++ (show r2)  ))
-  sequence $ [{-logf, -}putStrLn] <*> (pure ( "Nonce: " ++ (show r3)))
-  sequence $ [{-logf, -}putStrLn] <*> (pure ( "PCR Values: " ++ (show r4)))
+  sequence $ [{-logf, -}Prelude.putStrLn] <*> (pure ("CACert Signature: " ++ (show r1)))
+  sequence $ [{-logf, -}Prelude.putStrLn] <*> (pure ( "Quote Package Signature: " ++ (show r2)  ))
+  sequence $ [{-logf, -}Prelude.putStrLn] <*> (pure ( "Nonce: " ++ (show r3)))
+  sequence $ [{-logf, -}Prelude.putStrLn] <*> (pure ( "PCR Values: " ++ (show r4)))
 
   return $ case (and [r1, r2, r3, r4]) of
     True -> "All checks succeeded"
