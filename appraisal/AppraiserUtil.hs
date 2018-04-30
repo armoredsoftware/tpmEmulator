@@ -82,7 +82,7 @@ appReceive ea = do
   waitForFile attRespFile
   lbsRead <- LB.readFile attRespFile
   Prelude.putStr "from server: "
-  LB.putStrLn lbsRead
+  BS.putStr (LB.toStrict lbsRead)
   Prelude.putStrLn "end"
   let
     maybeAttResp :: Maybe Attester_Response

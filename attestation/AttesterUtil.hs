@@ -47,7 +47,7 @@ attReceive ea = do
   waitForFile appReqFile
   lbsRead <- LB.readFile appReqFile
   Prelude.putStr "from client: "
-  LB.putStrLn lbsRead
+  S.putStrLn (LB.toStrict lbsRead)
   Prelude.putStrLn "end"
 
   
