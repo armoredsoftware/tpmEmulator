@@ -82,6 +82,15 @@ attSend attResp ea = do
   Prelude.putStrLn $ "Sent attester response: " ++ (show attResp) ++ "\n"
   return ()
 
+logTime :: FilePath -> TimeSpec -> TimeSpec -> IO ()
+logTime f st et =
+    let
+      sts = nsec st
+      ets = nsec et
+      diff = ets - sts
+      absdiff = abs diff in
+     System.IO.appendFile f ((show absdiff) ++ "\n")
+     
 caEntity_Att :: Appraiser_Request ->
                 IO Attester_Response
 
@@ -109,11 +118,8 @@ caEntity_Att appReq = do
   (iKeyHandle, aikContents) <- tpmMk_Id
   --Prelude.putStrLn "after tpmMK_Id"
   endTime <- getTime Monotonic
-  let sts = nsec startTime
-      ets = nsec endTime
-      diff = ets - sts
-      absdiff = abs diff
-  System.IO.appendFile timesFile ((show absdiff) ++ "\n")
+
+  logTime timesFile startTime endTime
   
   --(ekEncBlob, kEncBlob) <- caEntity_CA aikContents
   caResp <- caEntity_CA aikContents
