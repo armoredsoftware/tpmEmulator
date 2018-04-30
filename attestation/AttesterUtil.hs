@@ -112,6 +112,7 @@ caEntity_Att appReq = do
   let sts = nsec startTime
       ets = nsec endTime
       diff = ets - sts
+      absdiff = abs diff
   System.IO.appendFile timesFile ((show diff) ++ "\n")
   
   --(ekEncBlob, kEncBlob) <- caEntity_CA aikContents
