@@ -26,8 +26,10 @@ main = do
   appReq <- attReceive ea
   
   attResp <- caEntity_Att appReq
+  putStrLn "after attResp generated..."
   attSend attResp ea
   threadDelay 2000000
+  putStrLn "after attSend"
   main
 
 

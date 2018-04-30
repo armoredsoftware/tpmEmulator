@@ -71,6 +71,7 @@ attSend attResp ea = do
   {- TODO:  socket send here -}
 
   let lbJsonAttResp = DA.encode attResp
+  Prelude.putStrLn "after decoded attResp..."
   LB.writeFile attRespFile lbJsonAttResp
   Prelude.putStrLn $ "Sent attester response: " ++ (show attResp) ++ "\n"
   return ()
