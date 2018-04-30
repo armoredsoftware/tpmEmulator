@@ -102,8 +102,8 @@ caEntity_Att :: Appraiser_Request ->
                        (SignedData TPM_PUBKEY), Signature) -}
 caEntity_Att appReq = do
   let
-    --nApp = appnonce appReq
-    nApp = 0 {- NOTE:  uncomment this line for nonce attack-}
+    nApp = appnonce appReq
+    --nApp = 0 {- NOTE:  uncomment this line for nonce attack-}
     pcrSelect = apppcrSelect appReq
 
   Prelude.putStrLn "Main of entity Attester:"
@@ -121,6 +121,7 @@ caEntity_Att appReq = do
   --Prelude.putStrLn "before tpmMK_Idddddd"
   startTime <- getTime Monotonic
   (iKeyHandle, aikContents) <- tpmMk_Id
+  (newIkeyHandle, _) <- tpmMk_Id
   --Prelude.putStrLn "after tpmMK_Id"
   endTime <- getTime Monotonic
 
@@ -143,7 +144,8 @@ caEntity_Att appReq = do
   --Prelude.putStrLn "before quote"
 
   qstartTime <- getTime Monotonic
-  (pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
+  --(pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
+  (pcrComp, qSig) <- tpmQuote newIkeyHandle pcrSelect quoteExData
   qendTime <- getTime Monotonic
   logTime qtimesFile qstartTime qendTime
   
