@@ -31,6 +31,7 @@ import qualified Data.Text as T
 appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
 attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
+{-
 waitForFile :: IO ()
 waitForFile = do
   fileExists <- (doesFileExist attRespFile)
@@ -41,6 +42,7 @@ waitForFile = do
       waitForFile      
     else do
       return ()
+-}
 
 appSend :: Appraiser_Request -> Entity_Address -> IO ()
 appSend ar ea  = do
@@ -75,7 +77,7 @@ appReceive :: Entity_Address -> IO Attester_Response
 appReceive ea = do
   {-TODO:  socket receive here (using entity address parameter) -}
 
-  waitForFile
+  --waitForFile
   lbsRead <- LB.readFile attRespFile
   let
     maybeAttResp :: Maybe Attester_Response

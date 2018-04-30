@@ -35,8 +35,7 @@ portListen = withSocketsDo $ do
         void $ forkFinally (talk conn) (\_ -> do close conn)
     talk conn = do
         msg <- recv conn 1024
-	putStrLn "Msg received ... : "
-        S.putStrLn msg
+	putStrLn $ "Msg received: " ++ (C.unpack msg)
         S.writeFile "/home/adam/tpmEmulator/demo/attestation/temp.txt" msg
 	return ()
 	{-
@@ -60,10 +59,14 @@ portSend myIP myMsg = withSocketsDo $ do
         return sock
     talk sock = do
         myInt <- send sock $ C.unpack myMsg
-        putStrLn $ show myInt
-        msg <- recv sock 1024
+        putStrLn $ "portSend, sent (" ++ (show myInt) ++ " bytes): "
+                 ++ (C.unpack myMsg)
+
+        {-msg <- recv sock 1024
         putStr "Received: "
         C.putStrLn msg
+        -}
+
 
 {-
 import Codec.Crypto.RSA
