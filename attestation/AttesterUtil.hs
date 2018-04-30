@@ -29,7 +29,7 @@ import Comm
 --appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
-timesFile = "/home/adam/tpmEmulator/demo/attester/times.txt"
+timesFile = "/home/adam/tpmEmulator/demo/attestation/times.txt"
 
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
