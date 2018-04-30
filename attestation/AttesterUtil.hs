@@ -102,7 +102,8 @@ caEntity_Att :: Appraiser_Request ->
                        (SignedData TPM_PUBKEY), Signature) -}
 caEntity_Att appReq = do
   let
-    nApp = appnonce appReq
+    --nApp = appnonce appReq
+    nApp = 0 {- NOTE:  uncomment this line for nonce attack-}
     pcrSelect = apppcrSelect appReq
 
   Prelude.putStrLn "Main of entity Attester:"
