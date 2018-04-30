@@ -13,24 +13,6 @@ build-type:          Simple
 --extra-source-files:  README.md
 cabal-version:       >=1.10
 
-executable App1
-  build-depends:       base >= 4.7 && < 5,
-                       bytestring,
-                       process,
-
-                       tpm-util
-                       		       
-  main-is:            App1.hs
-
-executable BAD_App1
-  build-depends:       base >= 4.7 && < 5,
-                       bytestring,
-                       process,
-
-                       tpm-util
-		       
-  main-is:            BAD_App1.hs
-
 executable AttMain
 
   hs-source-dirs:      ./
