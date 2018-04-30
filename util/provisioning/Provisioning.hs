@@ -52,7 +52,7 @@ pcrProvision = do
   val <- pcrExtendDemo (fromStrict h)
   putStrLn "Extended into PCR.  New PCR value:"
   putStrLn $ (show val) ++ "\n"
-  system fn
+--  system fn
   exportCurrentComp
 
 measure :: IO ()
