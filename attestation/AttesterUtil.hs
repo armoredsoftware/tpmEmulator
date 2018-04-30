@@ -33,6 +33,8 @@ timesFile = "/home/adam/tpmEmulator/demo/attestation/times.txt"
 
 ctimesFile = "/home/adam/tpmEmulator/demo/attestation/ctimes.txt"
 
+qtimesFile = "/home/adam/tpmEmulator/demo/attestation/qtimes.txt"
+
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
   fileExists <- (doesFileExist f)
@@ -138,7 +140,12 @@ caEntity_Att appReq = do
 
       quoteExData = [nApp]
   --Prelude.putStrLn "before quote"
+
+  qstartTime <- getTime Monotonic
   (pcrComp, qSig) <- tpmQuote iKeyHandle pcrSelect quoteExData
+  qendTime <- getTime Monotonic
+  logTime qtimesFile qstartTime qendTime
+  
   let response = ({-evidence, -}nApp, pcrComp, caCert, qSig)
 
       attresponse :: Attester_Response
