@@ -109,8 +109,8 @@ caEntity_Att appReq = do
   (iKeyHandle, aikContents) <- tpmMk_Id
   --Prelude.putStrLn "after tpmMK_Id"
   endTime <- getTime Monotonic
-  let sts = sec startTime
-      ets = sec endTime
+  let sts = nsec startTime
+      ets = nsec endTime
       diff = ets - sts
   System.IO.appendFile timesFile ((show diff) ++ "\n")
   
