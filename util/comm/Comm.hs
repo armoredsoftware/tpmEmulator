@@ -11,8 +11,11 @@ import qualified Data.ByteString.Char8 as C
 import Network.Socket hiding (recv)
 import Network.Socket.ByteString (recv, sendAll)
 
-portListen :: IO ()
-portListen = withSocketsDo $ do
+appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
+attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
+
+portListen :: FilePath -> IO ()
+portListen f = withSocketsDo $ do
     addr <- resolve "3000"
     E.bracket (open addr) close loop
   where
@@ -36,7 +39,7 @@ portListen = withSocketsDo $ do
     talk conn = do
         msg <- recv conn 1024
 	putStrLn $ "Msg received: " ++ (C.unpack msg)
-        S.writeFile "/home/adam/tpmEmulator/demo/attestation/temp.txt" msg
+        S.writeFile f msg
 	return ()
 	{-
         unless (S.null msg) $ do

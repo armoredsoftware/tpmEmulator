@@ -24,28 +24,28 @@ import Comm
 --appReqFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/attResp.txt"
 
-appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
-attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
+--appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
+--attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
-{-waitForFile :: IO ()
-waitForFile = do
-  fileExists <- (doesFileExist appReqFile)
+waitForFile :: FilePath -> IO ()
+waitForFile f = do
+  fileExists <- (doesFileExist f)
   if (not fileExists)
     then do
       Prelude.putStrLn "Waiting for Appraiser Request..."
       threadDelay 2000000
-      waitForFile      
+      waitForFile f      
     else do
       return ()
--}
+
 
 attReceive :: Entity_Address -> IO Appraiser_Request
 attReceive ea = do
   {-TODO:  socket receive here (using entity address parameter) -}
 
-  portListen
-  threadDelay 3000000
-  lbsRead <- S.readFile "/home/adam/tpmEmulator/demo/attestation/temp.txt"
+  portListen appReqFile
+  waitForFile appReqFile
+  lbsRead <- S.readFile appReqFile
   Prelude.putStr "from client: "
   C.putStrLn lbsRead
   Prelude.putStrLn "end"
