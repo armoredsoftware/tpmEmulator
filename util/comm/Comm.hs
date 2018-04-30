@@ -37,7 +37,7 @@ portListen f = withSocketsDo $ do
         putStrLn $ "Connection from " ++ show peer
         void $ forkFinally (talk conn) (\_ -> do close conn)
     talk conn = do
-        msg <- recv conn 1024
+        msg <- recv conn 2048
 	putStrLn $ "Msg received: " ++ (C.unpack msg)
         S.writeFile f msg
 	return ()
