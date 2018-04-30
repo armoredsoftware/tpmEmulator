@@ -8,6 +8,8 @@ te=$DEMO_PATH
 #(cd scripts ; ./restart_tpm.sh; ./build_all.sh; ./deploy_executables.sh)
 #make provision
 cd $te"/appraisal/"; ./AppMain #make run
+#cd $te"/apps/"; ./unhappy
+cd $te"/attestation/"; ./App1
 #rm "/home/adam/tpmEmulator/appraisal/appReq.txt"
 #rm "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
