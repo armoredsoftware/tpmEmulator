@@ -28,8 +28,8 @@ import qualified Data.Text as T
 --appReqFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/Users/adampetz/Documents/Spring_2018/tpmEmulator/appraisal/attResp.txt"
 
-appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
-attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
+--appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
+--attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
 {-
 waitForFile :: IO ()
