@@ -23,7 +23,9 @@ main = do
   let 
     ea :: Entity_Address
     ea = Entity_Address 0 0
+  putStrLn "before attReceive in AttMain"
   appReq <- attReceive ea
+  putStrLn "after attReceive in AttMain"
   
   attResp <- caEntity_Att appReq
   putStrLn "after attResp generated..."
