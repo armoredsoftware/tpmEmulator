@@ -31,6 +31,8 @@ import Comm
 
 timesFile = "/home/adam/tpmEmulator/demo/attestation/times.txt"
 
+ctimesFile = "/home/adam/tpmEmulator/demo/attestation/ctimes.txt"
+
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
   fileExists <- (doesFileExist f)
@@ -125,7 +127,12 @@ caEntity_Att appReq = do
   caResp <- caEntity_CA aikContents
   let ekEncBlob = symmKeyCipher caResp
       kEncBlob = certCipher caResp
+
+  cstartTime <- getTime Monotonic
   sessKey <- tpmAct_Id iKeyHandle ekEncBlob
+  cendTime <- getTime Monotonic
+
+  logTime ctimesFile cstartTime cendTime
   let caCert :: (SignedData TPM_PUBKEY)
       caCert = realDecrypt sessKey kEncBlob
 
