@@ -113,7 +113,7 @@ caEntity_Att appReq = do
       ets = nsec endTime
       diff = ets - sts
       absdiff = abs diff
-  System.IO.appendFile timesFile ((show diff) ++ "\n")
+  System.IO.appendFile timesFile ((show absdiff) ++ "\n")
   
   --(ekEncBlob, kEncBlob) <- caEntity_CA aikContents
   caResp <- caEntity_CA aikContents
