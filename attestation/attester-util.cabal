@@ -48,6 +48,7 @@ executable AttMain
                        random,
                        cipher-aes,
                        process,
+                       clock,
 
                        
                        tpm-emulator,
@@ -73,6 +74,7 @@ library
                        process,
                        aeson,
                        directory,
+                       clock,
                        
                        tpm-emulator,
                        tpm-util,

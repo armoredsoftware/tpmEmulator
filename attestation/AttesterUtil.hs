@@ -13,6 +13,8 @@ import Control.Monad(unless)
 import System.Directory(doesFileExist)
 import Control.Concurrent
 import Data.ByteString.Char8 as C
+import System.Clock
+import System.IO
 
 
 import TPM
@@ -26,6 +28,8 @@ import Comm
 
 --appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
+
+timesFile = "/home/adam/tpmEmulator/demo/attester/times.txt"
 
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
@@ -101,8 +105,15 @@ caEntity_Att appReq = do
   -}
 
   --Prelude.putStrLn "before tpmMK_Idddddd"
+  startTime <- getTime Monotonic
   (iKeyHandle, aikContents) <- tpmMk_Id
   --Prelude.putStrLn "after tpmMK_Id"
+  endTime <- getTime Monotonic
+  let sts = sec startTime
+      ets = sec endTime
+      diff = ets - sts
+  System.IO.appendFile timesFile ((show diff) ++ "\n")
+  
   --(ekEncBlob, kEncBlob) <- caEntity_CA aikContents
   caResp <- caEntity_CA aikContents
   let ekEncBlob = symmKeyCipher caResp
