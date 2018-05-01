@@ -32,8 +32,8 @@ import qualified Data.Text as T
 --appReqFile = "/home/adam/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
-portNumber = "192.168.65.132"
---portNumber = "129.237.123.192"
+--portNumber = "192.168.65.132"
+portNumber = "129.237.123.192"
 
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
