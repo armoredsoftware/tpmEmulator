@@ -10,6 +10,7 @@ import AppraiserUtil
 --import Comm(portSend)
 import Data.ByteString.Char8 as C
 import Comm(getAppReqFile, getAttRespFile)
+import System.Directory(doesFileExist)
             
 main = do
   args <- getArgs
@@ -29,8 +30,21 @@ main = do
     evaluate appReq attResp
     appReqFile <- getAppReqFile
     attRespFile <- getAttRespFile
-    removeFile appReqFile
-    removeFile attRespFile
+
+    appfileExists <- (doesFileExist appReqFile)
+    if(appfileExists)
+    then 
+      removeFile appReqFile
+    else
+      return ()
+
+    attfileExists <- (doesFileExist attRespFile)
+    if(attfileExists)
+    then 
+      removeFile attRespFile
+    else
+      return ()
+
     return ()
   else
     error "must provide target IP string to AppMain"
