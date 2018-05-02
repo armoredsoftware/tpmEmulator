@@ -11,11 +11,11 @@ import qualified Data.ByteString.Char8 as C
 import Network.Socket hiding (recv)
 import Network.Socket.ByteString (recv, sendAll)
 
-appReqFile =  "/home/odroid/Documents/projects/tpmEmulator/appraisal/appReq.txt"
-attRespFile = "/home/odroid/Documents/projects/tpmEmulator/appraisal/attResp.txt"
+--appReqFile =  "/home/odroid/Documents/projects/tpmEmulator/appraisal/appReq.txt"
+--attRespFile = "/home/odroid/Documents/projects/tpmEmulator/appraisal/attResp.txt"
 
---appReqFile =  "/home/adam/tpmEmulator/appraisal/appReq.txt"
---attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
+appReqFile =  "/home/adam/tpmEmulator/appraisal/appReq.txt"
+attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
 portListen :: FilePath -> IO ()
 portListen f = withSocketsDo $ do
