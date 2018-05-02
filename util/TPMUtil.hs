@@ -253,7 +253,7 @@ data Attester_Response = Attester_Response {
 
 data Entity_Address = Entity_Address {
   portNum :: Int,
-  ip :: Int {- TODO: real host info here -}
+  ip :: String {- TODO: real host info here -}
   }  deriving (Show, Read, Eq, Generic)
 
 data CA_Response = CA_Response {

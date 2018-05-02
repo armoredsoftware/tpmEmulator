@@ -30,7 +30,7 @@ import Comm
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
 --portNumber = "192.168.65.132"
-portNumber = "129.237.123.192"
+--portNumber = "129.237.123.192"
 
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
@@ -68,8 +68,9 @@ attSend :: Attester_Response -> Entity_Address -> IO ()
 attSend attResp ea = do
 
   let lbJsonAttResp = DA.encode attResp
+      pn = ip ea
   Prelude.putStrLn "after encoded attResp..."
-  portSend portNumber (LB.toStrict lbJsonAttResp)
+  portSend pn (LB.toStrict lbJsonAttResp)
   Prelude.putStrLn $ "Sent attester response: " ++ (show attResp) ++ "\n"
   return ()
 

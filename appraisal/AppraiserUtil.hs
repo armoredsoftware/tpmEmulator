@@ -33,7 +33,7 @@ import qualified Data.Text as T
 --attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
 --portNumber = "192.168.65.132"
-portNumber = "129.237.123.192"
+--portNumber = "129.237.123.192"
 
 waitForFile :: FilePath -> IO ()
 waitForFile f = do
@@ -50,11 +50,12 @@ appSend :: Appraiser_Request -> Entity_Address -> IO ()
 appSend ar ea  = do
   let ps = apppcrSelect ar
       --n  = appnonce ar
+      pn = ip ea
   Prelude.putStrLn "Main of entity Appraiser:" 
   Prelude.putStrLn $ "Sending Request: ( " ++ (show ps) ++ ", Nonce ) \n"
   let lbJsonAppReq = DA.encode ar
 
-  portSend portNumber (LB.toStrict lbJsonAppReq)
+  portSend pn (LB.toStrict lbJsonAppReq)
   return ()
 
 appReceive :: Entity_Address -> IO Attester_Response

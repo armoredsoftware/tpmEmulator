@@ -8,9 +8,12 @@ te=$DEMO_PATH
 #(cd scripts ; ./restart_tpm.sh; ./build_all.sh; ./deploy_executables.sh)
 #make provision
 
+
+ipString="192.168.65.132"
+
 for i in {1..4}
 do
-    cd $te"/appraisal/"; ./AppMain #make run
+    cd $te"/appraisal/"; ./AppMain $ipString                    #make run
     sleep 10s
 done
 
