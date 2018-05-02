@@ -3,6 +3,12 @@ all: build
 build:
 	@(cd scripts; ./make_all.sh)
 
+app:
+	@(cd scripts; ./make_app.sh)
+
+att:
+	@(cd scripts; ./make_att.sh)
+
 provision: #provisioning/ProvisioningMain
 	(cd scripts; ./deploy_provisioning.sh)
 

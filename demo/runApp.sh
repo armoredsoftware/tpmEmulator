@@ -11,6 +11,9 @@ te=$DEMO_PATH
 
 ipString="192.168.65.132"
 
+make clean
+(cd scripts ; ./build_app.sh; ./deploy_executables.sh)
+
 for i in {1..4}
 do
     cd $te"/appraisal/"; ./AppMain $ipString                    #make run
