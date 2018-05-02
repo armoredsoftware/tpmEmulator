@@ -7,7 +7,7 @@ rm $te/appraisal/AppMain
 rm $te/attestation/AttMain
 #rm $te/attestation/temp.txt
 
-#rm $te"/../appraisal/appReq.txt"
+rm $te"/../appraisal/appReq.txt"
 #rm $te"/../appraisal/attResp.txt"
 
 rm $te/provisioning/ProvisioningMain
