@@ -46,6 +46,7 @@ waitForFile f = do
 
 attReceive :: Entity_Address -> IO Appraiser_Request
 attReceive ea = do
+  appReqFile <- getAppReqFile
   portListen appReqFile
   waitForFile appReqFile
   lbsRead <- LB.readFile appReqFile

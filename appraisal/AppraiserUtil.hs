@@ -60,6 +60,7 @@ appSend ar ea  = do
 
 appReceive :: Entity_Address -> IO Attester_Response
 appReceive ea = do
+  attRespFile <- getAttRespFile
   portListen attRespFile
   waitForFile attRespFile
   lbsRead <- LB.readFile attRespFile

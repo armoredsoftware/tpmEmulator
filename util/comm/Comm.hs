@@ -10,12 +10,21 @@ import qualified Data.ByteString as S
 import qualified Data.ByteString.Char8 as C
 import Network.Socket hiding (recv)
 import Network.Socket.ByteString (recv, sendAll)
+import System.Environment(getEnv)
 
 --appReqFile =  "/home/odroid/Documents/projects/tpmEmulator/appraisal/appReq.txt"
 --attRespFile = "/home/odroid/Documents/projects/tpmEmulator/appraisal/attResp.txt"
 
-appReqFile =  "/home/adam/tpmEmulator/appraisal/appReq.txt"
-attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
+getAppReqFile = do
+  f <- prependDemoDir' "../appraisal/appReq.txt"
+  return f
+
+getAttRespFile = do
+  f <- prependDemoDir' "../appraisal/attResp.txt"
+  return f
+  
+--appReqFile =  "/home/adam/tpmEmulator/appraisal/appReq.txt"
+--attRespFile = "/home/adam/tpmEmulator/appraisal/attResp.txt"
 
 portListen :: FilePath -> IO ()
 portListen f = withSocketsDo $ do
@@ -72,6 +81,20 @@ portSend myIP myMsg = withSocketsDo $ do
         putStr "Received: "
         C.putStrLn msg
         -}
+
+prependDemoDir' :: String -> IO String
+prependDemoDir' suffix = do
+  prefix <- getEnv "DEMO_PATH"
+  let cleanPrefix = if ((Prelude.last prefix) == '/')
+                    then prefix
+                    else prefix ++ "/"
+                      
+  return (cleanPrefix ++ suffix)
+
+
+
+
+
 
 
 {-

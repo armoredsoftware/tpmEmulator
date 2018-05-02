@@ -9,7 +9,7 @@ import TPMUtil
 import AppraiserUtil
 --import Comm(portSend)
 import Data.ByteString.Char8 as C
-import Comm(appReqFile, attRespFile)
+import Comm(getAppReqFile, getAttRespFile)
             
 main = do
   args <- getArgs
@@ -27,6 +27,8 @@ main = do
     threadDelay 5
     attResp <- appReceive ea
     evaluate appReq attResp
+    appReqFile <- getAppReqFile
+    attRespFile <- getAttRespFile
     removeFile appReqFile
     removeFile attRespFile
     return ()
