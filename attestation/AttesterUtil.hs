@@ -110,7 +110,7 @@ caEntity_Att appReq = do
   --Prelude.putStrLn "before tpmMK_Idddddd"
   startTime <- getTime Monotonic
   (iKeyHandle, aikContents) <- tpmMk_Id
-  (newIkeyHandle, _) <- tpmMk_Id
+  --(newIkeyHandle, _) <- tpmMk_Id
   --Prelude.putStrLn "after tpmMK_Id"
   endTime <- getTime Monotonic
 
